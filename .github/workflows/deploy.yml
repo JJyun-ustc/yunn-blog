@@ -20,7 +20,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BUILD_PATH: '.' # 构建 Astro 站点的路径
+  BUILD_PATH: '.'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
