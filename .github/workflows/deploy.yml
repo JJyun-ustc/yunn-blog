@@ -51,6 +51,15 @@ jobs:
         env:
           # Astro 构建时会使用这个 URL
           SITE_URL: ${{ steps.pages.outputs.origin }}
+          PUBLIC_GISCUS_REPO: ${{ vars.PUBLIC_GISCUS_REPO }}
+          PUBLIC_GISCUS_REPO_ID: ${{ vars.PUBLIC_GISCUS_REPO_ID }}
+          PUBLIC_GISCUS_CATEGORY: ${{ vars.PUBLIC_GISCUS_CATEGORY }}
+          PUBLIC_GISCUS_CATEGORY_ID: ${{ vars.PUBLIC_GISCUS_CATEGORY_ID }}
+          PUBLIC_GISCUS_MAPPING: ${{ vars.PUBLIC_GISCUS_MAPPING }}
+          PUBLIC_GISCUS_THEME: ${{ vars.PUBLIC_GISCUS_THEME }}
+          PUBLIC_GISCUS_LANG: ${{ vars.PUBLIC_GISCUS_LANG }}
+          TINA_CLIENT_ID: ${{ secrets.TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

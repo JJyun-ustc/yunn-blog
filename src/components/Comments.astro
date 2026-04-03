@@ -1,25 +1,12 @@
 ---
-interface Props {
-  // Giscus 配置参数 - 用户需要替换为自己的仓库信息
-  repo?: string;           // 格式: 'owner/repo'
-  repoId?: string;
-  category?: string;
-  categoryId?: string;
-  mapping?: 'pathname' | 'url' | 'title' | 'og:title' | 'specific' | 'number';
-  theme?: 'light' | 'dark' | 'preferred_color_scheme' | 'transparent_dark' | 'dark_dimmed' | 'dark_high_contrast';
-  lang?: string;
-}
-
-// 默认配置 - 用户需要修改这些值
-const {
-  repo = 'your-username/your-blog-repo',
-  repoId = 'your-repo-id',
-  category = 'Announcements',
-  categoryId = 'your-category-id',
-  mapping = 'pathname',
-  theme = 'preferred_color_scheme',
-  lang = 'zh-CN'
-} = Astro.props;
+const repo = import.meta.env.PUBLIC_GISCUS_REPO;
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID;
+const category = import.meta.env.PUBLIC_GISCUS_CATEGORY || 'Announcements';
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID;
+const mapping = import.meta.env.PUBLIC_GISCUS_MAPPING || 'pathname';
+const theme = import.meta.env.PUBLIC_GISCUS_THEME || 'preferred_color_scheme';
+const lang = import.meta.env.PUBLIC_GISCUS_LANG || 'zh-CN';
+const isConfigured = Boolean(repo && repoId && categoryId);
 ---
 
 <div class="comments-section">
@@ -27,26 +14,33 @@ const {
     <h3>评论区</h3>
     <p class="comments-hint">使用 GitHub 账号参与讨论</p>
   </div>
-  
-  <div class="giscus-container">
-    <script 
-      src="https://giscus.app/client.js"
-      data-repo={repo}
-      data-repo-id={repoId}
-      data-category={category}
-      data-category-id={categoryId}
-      data-mapping={mapping}
-      data-strict="0"
-      data-reactions-enabled="1"
-      data-emit-metadata="0"
-      data-input-position="top"
-      data-theme={theme}
-      data-lang={lang}
-      data-loading="lazy"
-      crossorigin="anonymous"
-      async
-    ></script>
-  </div>
+
+  {isConfigured ? (
+    <div class="giscus-container">
+      <script
+        src="https://giscus.app/client.js"
+        data-repo={repo}
+        data-repo-id={repoId}
+        data-category={category}
+        data-category-id={categoryId}
+        data-mapping={mapping}
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme={theme}
+        data-lang={lang}
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      ></script>
+    </div>
+  ) : (
+    <div class="comments-disabled">
+      <p>评论系统尚未完成配置。</p>
+      <p>需要先启用 GitHub Discussions，并填写 Giscus 的仓库与分类参数。</p>
+    </div>
+  )}
 
   <noscript>
     <p class="noscript-hint">
@@ -84,6 +78,18 @@ const {
     min-height: 200px;
   }
 
+  .comments-disabled {
+    padding: 1.25rem;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    background: var(--card-bg);
+  }
+
+  .comments-disabled p {
+    margin: 0.25rem 0;
+    color: var(--text-muted);
+  }
+
   .noscript-hint {
     text-align: center;
     padding: 2rem;
@@ -93,7 +99,6 @@ const {
     color: var(--text-muted);
   }
 
-  /* Giscus iframe 样式调整 */
   :global(.giscus) {
     max-width: 100%;
   }

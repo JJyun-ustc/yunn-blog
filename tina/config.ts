@@ -3,6 +3,7 @@ import { defineConfig } from "tinacms";
 const branch =
   process.env.GITHUB_BRANCH ||
   process.env.VERCEL_GIT_COMMIT_REF ||
+  process.env.HEAD ||
   "main";
 
 export default defineConfig({
@@ -23,21 +24,21 @@ export default defineConfig({
     collections: [
       {
         name: "blog",
-        label: "博客文章",
+        label: "Blog Posts",
         path: "src/content/blog",
         format: "md",
         fields: [
           {
             type: "string",
             name: "title",
-            label: "标题",
+            label: "Title",
             isTitle: true,
             required: true,
           },
           {
             type: "string",
             name: "description",
-            label: "描述",
+            label: "Description",
             required: true,
             ui: {
               component: "textarea",
@@ -46,30 +47,30 @@ export default defineConfig({
           {
             type: "datetime",
             name: "pubDate",
-            label: "发布日期",
+            label: "Published At",
             required: true,
           },
           {
             type: "datetime",
             name: "updatedDate",
-            label: "更新日期",
+            label: "Updated At",
           },
           {
             type: "image",
             name: "heroImage",
-            label: "封面图片",
+            label: "Hero Image",
           },
           {
             type: "string",
             name: "category",
-            label: "分类",
+            label: "Category",
             required: true,
             options: ["随笔", "读书", "生活", "旅行", "美食"],
           },
           {
             type: "string",
             name: "tags",
-            label: "标签",
+            label: "Tags",
             list: true,
             ui: {
               component: "tags",
@@ -78,35 +79,13 @@ export default defineConfig({
           {
             type: "boolean",
             name: "draft",
-            label: "草稿",
+            label: "Draft",
           },
           {
             type: "rich-text",
             name: "body",
-            label: "正文",
+            label: "Body",
             isBody: true,
-            templates: [
-              {
-                name: "blockquote",
-                label: "引用",
-                fields: [
-                  {
-                    type: "string",
-                    name: "quote",
-                    label: "引用内容",
-                    required: true,
-                    ui: {
-                      component: "textarea",
-                    },
-                  },
-                  {
-                    type: "string",
-                    name: "author",
-                    label: "作者",
-                  },
-                ],
-              },
-            ],
           },
         ],
       },
