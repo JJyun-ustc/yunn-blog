@@ -137,7 +137,13 @@ rmSync(publicAdminDir, { recursive: true, force: true });
 
 if (hasTinaCredentials) {
   console.log('Tina credentials detected, building TinaCMS admin...');
-  run('npx tinacms build');
+  try {
+    run('npx tinacms build');
+  } catch (error) {
+    console.warn('TinaCMS build failed, falling back to the placeholder admin page.');
+    console.warn(error instanceof Error ? error.message : error);
+    writeFallbackAdminPage();
+  }
 } else {
   console.log('Tina credentials not found, writing fallback admin page...');
   writeFallbackAdminPage();
