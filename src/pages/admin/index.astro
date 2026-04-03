@@ -1,0 +1,134 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead
+      title={`TinaCMS 管理后台 - ${SITE_TITLE}`}
+      description="TinaCMS 管理后台入口与配置说明"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="admin-hero">
+        <p class="eyebrow">CMS</p>
+        <h1>TinaCMS 管理后台</h1>
+        <p class="lead">
+          这个项目已经接入了 TinaCMS 配置，但当前仓库还没有配置 Tina Cloud
+          凭据，所以线上只能显示后台入口说明，不能直接在 GitHub Pages 上登录编辑。
+        </p>
+      </section>
+
+      <section class="admin-grid">
+        <article class="admin-card">
+          <h2>本地编辑</h2>
+          <p>如果你只想在自己电脑上管理文章，先启动 Tina 本地模式：</p>
+          <pre><code>npm run admin:dev</code></pre>
+          <p>启动后访问本地的 <code>/admin/</code> 页面即可进入编辑界面。</p>
+        </article>
+
+        <article class="admin-card">
+          <h2>线上启用</h2>
+          <p>如果你想让 GitHub Pages 上的后台真正可登录，需要先配置 Tina Cloud：</p>
+          <ul>
+            <li>在 Tina Cloud 创建项目并绑定这个 GitHub 仓库</li>
+            <li>配置 <code>TINA_CLIENT_ID</code> 和 <code>TINA_TOKEN</code></li>
+            <li>然后执行 <code>npm run admin:build</code> 生成正式后台</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="admin-note">
+        <h2>当前状态</h2>
+        <p>
+          现在这个页面的作用是替代原先的 404，并明确告诉你 TinaCMS 还差哪一步配置。
+          博客前台不受影响，仍然可以正常浏览。
+        </p>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .admin-hero {
+    padding: 3rem 0 2rem;
+    max-width: 760px;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0 0 1rem;
+    font-size: 2.4rem;
+    line-height: 1.2;
+  }
+
+  .lead {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .admin-card,
+  .admin-note {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px var(--shadow);
+  }
+
+  .admin-card h2,
+  .admin-note h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  .admin-card p,
+  .admin-note p,
+  .admin-card li {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .admin-card ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  pre {
+    margin: 1rem 0;
+    padding: 1rem 1.125rem;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+</style>
