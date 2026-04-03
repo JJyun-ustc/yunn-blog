@@ -13,7 +13,7 @@ const { title, description, pubDate, heroImage, category, tags } = post.data;
 ---
 
 <article class="blog-card">
-  <a href={withBase(`blog/${post.slug}/`)} class="card-link">
+  <a href={withBase(`blog/${post.id}/`)} class="card-link">
     {heroImage && (
       <div class="card-image">
         <Image src={heroImage} alt={title} width={800} height={400} />

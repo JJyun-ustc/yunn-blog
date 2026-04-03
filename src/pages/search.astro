@@ -10,7 +10,7 @@ const posts = await getCollection('blog');
 const searchablePosts = posts
   .filter(post => !post.data.draft)
   .map(post => ({
-    slug: post.slug,
+    slug: post.id,
     title: post.data.title,
     description: post.data.description,
     category: post.data.category || '随笔',
