@@ -58,7 +58,7 @@ jobs:
           PUBLIC_GISCUS_MAPPING: ${{ vars.PUBLIC_GISCUS_MAPPING }}
           PUBLIC_GISCUS_THEME: ${{ vars.PUBLIC_GISCUS_THEME }}
           PUBLIC_GISCUS_LANG: ${{ vars.PUBLIC_GISCUS_LANG }}
-          TINA_CLIENT_ID: ${{ secrets.TINA_CLIENT_ID }}
+          TINA_PUBLIC_CLIENT_ID: ${{ secrets.TINA_PUBLIC_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
 
       - name: Upload artifact

@@ -8,7 +8,7 @@ const rootDir = resolve(__dirname, '..');
 const publicAdminDir = resolve(rootDir, 'public', 'admin');
 const adminIndexPath = resolve(publicAdminDir, 'index.html');
 
-const tinaClientId = process.env.TINA_CLIENT_ID;
+const tinaClientId = process.env.TINA_PUBLIC_CLIENT_ID;
 const tinaToken = process.env.TINA_TOKEN;
 const hasTinaCredentials = Boolean(tinaClientId && tinaToken);
 
@@ -116,11 +116,11 @@ function writeFallbackAdminPage() {
       <p class="eyebrow">CMS</p>
       <h1>TinaCMS 后台尚未启用</h1>
       <p>
-        当前构建没有检测到 <code>TINA_CLIENT_ID</code> 和 <code>TINA_TOKEN</code>，
+        当前构建没有检测到 <code>TINA_PUBLIC_CLIENT_ID</code> 和 <code>TINA_TOKEN</code>，
         所以这里显示的是占位页，而不是真正的 TinaCloud 登录后台。
       </p>
       <p>要启用可登录后台，需要在 GitHub 仓库 Secrets 中配置这两个值，然后重新部署。</p>
-      <pre><code>TINA_CLIENT_ID=...
+      <pre><code>TINA_PUBLIC_CLIENT_ID=...
 TINA_TOKEN=...</code></pre>
       <ul>
         <li>本地编辑可运行：<code>npm run admin:dev</code></li>
