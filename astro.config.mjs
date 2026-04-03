@@ -8,12 +8,11 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // GitHub Pages 会自动添加仓库名作为 URL 前缀
-  // 所以这里只需要设置 GitHub Pages 的域名
+  // GitHub Pages URL
   site: 'https://jjyun-ustc.github.io',
   
-  // 不要设置 base，GitHub Pages 会自动处理
-  // base: '/yunn-blog/',  // ❌ 移除这个配置
+  // 仓库名作为 base 路径 - 这会让所有链接自动添加 /yunn-blog/ 前缀
+  base: '/yunn-blog',
   
   integrations: [mdx(), sitemap()],
   
