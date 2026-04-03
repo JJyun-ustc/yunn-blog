@@ -29,9 +29,8 @@ interface Props {
 const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 
-// 计算阅读时间和字数
-const rawContent = await post.render();
-const readingStats = calculateReadingTime(rawContent);
+// 计算阅读时间和字数（使用简化方法）
+const readingStats = post.body ? calculateReadingTime(post.body) : { time: '约 1 分钟', words: 0 };
 ---
 
 <BlogPost 
