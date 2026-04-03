@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
 import { getCollection } from 'astro:content';
+const basePath = import.meta.env.BASE_URL;
 
 const posts = await getCollection('blog');
 const searchablePosts = posts
@@ -39,7 +40,7 @@ const searchablePosts = posts
     </main>
     <Footer />
 
-    <script define:vars={{ searchablePosts }}>
+    <script define:vars={{ searchablePosts, basePath }}>
       const searchInput = document.getElementById('search-input');
       const searchResults = document.getElementById('search-results');
       const posts = searchablePosts;
@@ -64,7 +65,7 @@ const searchablePosts = posts
         }
 
         searchResults.innerHTML = results.map(post => `
-          <a href="/blog/${post.slug}/" class="search-result-item">
+          <a href="${basePath}blog/${post.slug}/" class="search-result-item">
             <span class="result-category">${post.category}</span>
             <h3 class="result-title">${post.title}</h3>
             <p class="result-desc">${post.description}</p>

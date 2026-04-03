@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import BlogCard from '../components/BlogCard.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
+import { withBase } from '../utils/paths';
 
 const posts = (await getCollection('blog'))
   .filter(post => !post.data.draft)
@@ -28,7 +29,7 @@ const posts = (await getCollection('blog'))
       <section class="recent-posts">
         <div class="section-header">
           <h2>最新文章</h2>
-          <a href="/blog" class="view-all">查看全部 →</a>
+          <a href={withBase('blog/')} class="view-all">查看全部 →</a>
         </div>
         <div class="posts-grid">
           {posts.map((post) => (

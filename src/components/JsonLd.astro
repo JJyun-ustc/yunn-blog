@@ -1,5 +1,6 @@
 ---
 import { SITE_TITLE, SITE_AUTHOR, SITE_DESCRIPTION } from '../consts';
+import { withBase } from '../utils/paths';
 
 interface Props {
   title?: string;
@@ -38,7 +39,7 @@ const jsonLd = {
       name: SITE_TITLE,
       logo: {
         '@type': 'ImageObject',
-        url: `${siteUrl}/favicon.svg`
+        url: new URL(withBase('favicon.svg'), siteUrl).toString()
       }
     },
     ...(datePublished && { datePublished: datePublished.toISOString() }),

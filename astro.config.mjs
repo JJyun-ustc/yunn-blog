@@ -13,6 +13,7 @@ export default defineConfig({
   
   // 仓库名作为 base 路径 - 这会让所有链接自动添加 /yunn-blog/ 前缀
   base: '/yunn-blog',
+  trailingSlash: 'always',
   
   integrations: [mdx(), sitemap()],
   

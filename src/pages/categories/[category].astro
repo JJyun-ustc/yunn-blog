@@ -5,19 +5,18 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { SITE_TITLE } from '../../consts';
+import { withBase } from '../../utils/paths';
 
-export function getStaticPaths() {
-  const posts = getCollection('blog');
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
   const categories = new Set<string>();
 
-  posts.then(allPosts => {
-    allPosts.forEach(post => {
-      const cat = post.data.category || '随笔';
-      categories.add(cat);
-    });
+  posts.forEach((post) => {
+    const category = post.data.category || '随笔';
+    categories.add(category);
   });
 
-  return Array.from(categories).map(category => ({
+  return Array.from(categories).map((category) => ({
     params: { category },
     props: { category },
   }));
@@ -26,20 +25,20 @@ export function getStaticPaths() {
 const { category } = Astro.props;
 const allPosts = await getCollection('blog');
 const posts = allPosts
-  .filter(post => (post.data.category || '随笔') === category && !post.data.draft)
+  .filter((post) => (post.data.category || '随笔') === category && !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={`${category} - ${SITE_TITLE}`} description={`分类: ${category}`} />
+    <BaseHead title={`${category} - ${SITE_TITLE}`} description={`分类：${category}`} />
   </head>
   <body>
     <Header />
     <main>
       <nav class="breadcrumb">
-        <a href="/categories">分类</a>
+        <a href={withBase('categories/')}>分类</a>
         <span>/</span>
         <span>{category}</span>
       </nav>

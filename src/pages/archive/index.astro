@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { SITE_TITLE } from '../../consts';
+import { withBase } from '../../utils/paths';
 
 const posts = (await getCollection('blog'))
   .filter(post => !post.data.draft)
@@ -39,7 +40,7 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
             <h2 class="year-title">{year}</h2>
             <div class="year-posts">
               {postsByYear[year].map(post => (
-                <a href={`/blog/${post.slug}/`} class="archive-item">
+                <a href={withBase(`blog/${post.slug}/`)} class="archive-item">
                   <span class="archive-date">
                     <FormattedDate date={post.data.pubDate} />
                   </span>

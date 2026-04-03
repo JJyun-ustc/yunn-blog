@@ -4,6 +4,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { SITE_TITLE } from '../../consts';
+import { withBase } from '../../utils/paths';
 
 const posts = await getCollection('blog');
 const tags: Record<string, number> = {};
@@ -29,7 +30,7 @@ const sortedTags = Object.entries(tags).sort((a, b) => b[1] - a[1]);
       <p class="page-desc">共 {sortedTags.length} 个标签</p>
       <div class="tags-cloud">
         {sortedTags.map(([tag, count]) => (
-          <a href={`/tags/${encodeURIComponent(tag)}/`} class="tag-item">
+          <a href={withBase(`tags/${encodeURIComponent(tag)}/`)} class="tag-item">
             <span class="tag-name">{tag}</span>
             <span class="tag-count">{count}</span>
           </a>
