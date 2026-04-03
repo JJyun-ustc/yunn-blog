@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -133,12 +133,19 @@ TINA_TOKEN=...</code></pre>
   );
 }
 
+function normalizeTinaAdminIndex() {
+  const html = readFileSync(adminIndexPath, 'utf8');
+  const normalizedHtml = html.replaceAll('/admin/assets/', './assets/');
+  writeFileSync(adminIndexPath, normalizedHtml, 'utf8');
+}
+
 rmSync(publicAdminDir, { recursive: true, force: true });
 
 if (hasTinaCredentials) {
   console.log('Tina credentials detected, building TinaCMS admin...');
   try {
     run('npx tinacms build');
+    normalizeTinaAdminIndex();
   } catch (error) {
     console.warn('TinaCMS build failed, falling back to the placeholder admin page.');
     console.warn(error instanceof Error ? error.message : error);
