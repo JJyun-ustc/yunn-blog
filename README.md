@@ -1,244 +1,243 @@
-# yunn-blog ✨
+# yunn-blog
 
-一个功能完善、美观现代的个人博客，使用 Astro 构建，部署在 GitHub Pages。
+基于 Astro 构建的个人博客，部署到 GitHub Pages，支持文章、分类、标签、归档、站内搜索、Giscus 评论和 TinaCMS 后台。
 
-## 🌟 特性
+线上地址：`https://jjyun-ustc.github.io/yunn-blog/`
 
-### 核心功能
-- ✅ **移动端响应式设计** - 完美适配各种设备
-- ✅ **暗黑模式** - 自动跟随系统设置，也可手动切换
-- ✅ **文章目录（TOC）** - 自动生成，滚动高亮
-- ✅ **阅读统计** - 显示阅读时间和字数
-- ✅ **阅读进度条** - 顶部渐变进度指示
-- ✅ **全站搜索** - 快速查找文章
-- ✅ **分类和标签** - 文章分类管理
-- ✅ **归档页面** - 按时间线展示所有文章
+## 技术栈
 
-### 增强功能
-- ✅ **评论系统** - 集成 Giscus（基于 GitHub Discussions）
-- ✅ **图片灯箱** - 点击图片放大查看
-- ✅ **代码高亮** - 支持 100+ 编程语言
-- ✅ **代码复制** - 一键复制代码块
-- ✅ **上一篇/下一篇** - 文章导航
-- ✅ **返回顶部** - 一键返回页面顶部
-- ✅ **友情链接** - 友链展示和申请
-- ✅ **RSS 订阅** - 支持 RSS 阅读器订阅
-- ✅ **SEO 优化** - 完善的 SEO 配置
+- Astro 6
+- Tailwind CSS 4
+- MDX
+- GitHub Pages
+- Giscus
+- TinaCMS
 
-### 内容管理
-- ✅ **Markdown/MDX 支持** - 写作更自由
-- ✅ **TinaCMS 集成** - 可视化内容管理
-- ✅ **草稿功能** - 未发布的文章不会显示
+## 已实现功能
 
-## 🚀 快速开始
+- 首页、文章列表、文章详情
+- 分类页、标签页、归档页
+- 站内搜索
+- RSS 与 sitemap
+- GitHub Pages 子路径部署
+- Giscus 评论系统
+- TinaCMS 后台入口 `/admin/`
 
-### 前置要求
-- Node.js 22.12.0 或更高版本
-- npm 或 pnpm
+## 本地开发
 
-### 安装
+要求：
+
+- Node.js `>= 22.12.0`
+- npm
+
+安装依赖：
 
 ```bash
-# 克隆仓库
-git clone https://github.com/你的用户名/yunn-blog.git
-
-# 进入项目目录
-cd yunn-blog
-
-# 安装依赖
 npm install
+```
 
-# 启动开发服务器
+启动开发环境：
+
+```bash
 npm run dev
 ```
 
-浏览器访问 `http://localhost:4321` 查看博客。
+默认访问：
 
-### 构建
+`http://localhost:4321`
+
+本地启动 TinaCMS 开发模式：
+
+```bash
+npm run admin:dev
+```
+
+## 构建命令
+
+构建站点：
 
 ```bash
 npm run build
 ```
 
-构建产物在 `dist` 文件夹中。
-
-### 预览构建结果
+预览构建结果：
 
 ```bash
 npm run preview
 ```
 
-## 📁 项目结构
+单独构建 Tina 后台：
 
-```
-yunn-blog/
-├── .github/              # GitHub 配置
-│   └── workflows/        # GitHub Actions 工作流
-├── public/               # 静态资源
-│   ├── fonts/            # 字体文件
-│   ├── favicon.ico       # 网站图标
-│   └── favicon.svg
-├── src/
-│   ├── assets/           # 图片等资源
-│   ├── components/       # Astro 组件
-│   │   ├── Header.astro
-│   │   ├── Footer.astro
-│   │   ├── BlogCard.astro
-│   │   ├── TableOfContents.astro
-│   │   ├── ReadingProgress.astro
-│   │   ├── BackToTop.astro
-│   │   ├── Comments.astro
-│   │   ├── ImageLightbox.astro
-│   │   ├── CodeCopy.astro
-│   │   └── ...
-│   ├── content/          # 博客内容
-│   │   └── blog/         # 文章 Markdown 文件
-│   ├── layouts/          # 页面布局
-│   │   └── BlogPost.astro
-│   ├── pages/            # 页面路由
-│   │   ├── index.astro
-│   │   ├── about.astro
-│   │   ├── friends.astro
-│   │   ├── 404.astro
-│   │   ├── blog/
-│   │   ├── categories/
-│   │   ├── tags/
-│   │   ├── archive/
-│   │   └── search.astro
-│   ├── styles/           # 全局样式
-│   │   └── global.css
-│   ├── consts.ts         # 站点配置
-│   ├── content.config.ts # 内容集合配置
-│   └── utils/            # 工具函数
-├── astro.config.mjs      # Astro 配置
-├── package.json
-├── tsconfig.json
-└── README.md
+```bash
+npm run admin:build
 ```
 
-## 📝 写文章
+说明：
 
-### 创建新文章
+- 正常生产构建走 `scripts/build-site.mjs`
+- 如果未配置 Tina Cloud 凭据，构建会保留一个可访问的 `/admin/` 占位页
+- 如果已配置 Tina Cloud 凭据，构建会生成正式 TinaCMS 后台
 
-在 `src/content/blog/` 文件夹中创建新的 `.md` 文件：
+## 文章内容
 
-```markdown
+文章目录：
+
+`src/content/blog/`
+
+新文章示例：
+
+```md
 ---
 title: '文章标题'
-description: '文章描述'
-pubDate: 'Apr 03 2026'
+description: '文章摘要'
+pubDate: 'Apr 04 2026'
 heroImage: '../../assets/blog-placeholder-1.jpg'
 category: '随笔'
-tags: ['标签1', '标签2']
+tags: ['博客', '记录']
 draft: false
 ---
 
-文章内容...
-
-## 二级标题
-
-正文内容...
-
-### 三级标题
-
-更多内容...
+正文内容
 ```
 
-### Frontmatter 字段说明
+常用 frontmatter 字段：
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `title` | string | ✅ | 文章标题 |
-| `description` | string | ✅ | 文章描述（用于 SEO 和分享） |
-| `pubDate` | string | ✅ | 发布日期 |
-| `updatedDate` | string | ❌ | 更新日期 |
-| `heroImage` | string | ❌ | 封面图片路径 |
-| `category` | string | ❌ | 分类（默认：随笔） |
-| `tags` | string[] | ❌ | 标签数组 |
-| `draft` | boolean | ❌ | 是否草稿（默认：false） |
+- `title`: 文章标题
+- `description`: 摘要
+- `pubDate`: 发布时间
+- `updatedDate`: 更新时间，可选
+- `heroImage`: 封面图，可选
+- `category`: 分类，可选
+- `tags`: 标签数组，可选
+- `draft`: 是否草稿，可选，默认 `false`
 
-## 🎨 自定义配置
+## 项目结构
 
-### 修改站点信息
-
-编辑 `src/consts.ts`：
-
-```typescript
-export const SITE_TITLE = '你的博客名字';
-export const SITE_DESCRIPTION = '你的博客描述';
-export const SITE_AUTHOR = '你的名字';
+```text
+yunn-blog/
+├─ .github/workflows/      # GitHub Pages 部署工作流
+├─ public/                 # 静态资源
+├─ scripts/build-site.mjs  # 生产构建入口
+├─ src/
+│  ├─ components/          # 页面组件
+│  ├─ content/blog/        # 博客文章
+│  ├─ layouts/             # 页面布局
+│  ├─ pages/               # 路由页面
+│  ├─ styles/              # 全局样式
+│  ├─ utils/paths.ts       # GitHub Pages base 路径工具
+│  ├─ consts.ts            # 站点常量
+│  └─ content.config.ts    # 内容集合配置
+├─ tina/
+│  ├─ config.ts            # TinaCMS 配置
+│  └─ tina-lock.json       # Tina Cloud 索引锁文件
+├─ .env.example
+├─ astro.config.mjs
+└─ package.json
 ```
 
-### 修改主题颜色
+## GitHub Pages 部署
 
-编辑 `src/styles/global.css`：
+本项目按仓库子路径部署，Astro 配置如下：
 
-```css
-:root {
-  --primary: #8B5CF6;      /* 主色调 */
-  --primary-dark: #7C3AED;  /* 主色调深色 */
-  --primary-light: #A78BFA; /* 主色调浅色 */
-  --accent: #F472B6;        /* 辅助色 */
-  --accent-light: #F9A8D4;  /* 辅助色浅色 */
-}
+- `site`: `https://jjyun-ustc.github.io`
+- `base`: `/yunn-blog`
+
+所以线上地址不是根域名首页，而是：
+
+`https://jjyun-ustc.github.io/yunn-blog/`
+
+部署方式：
+
+1. 推送代码到 `main`
+2. GitHub Actions 运行 `.github/workflows/deploy.yml`
+3. 构建完成后自动发布到 GitHub Pages
+
+## 评论系统配置
+
+评论系统使用 Giscus，评论实际存储在 GitHub Discussions。
+
+先决条件：
+
+1. 仓库开启 `Discussions`
+2. 安装 Giscus GitHub App
+3. 在 `https://giscus.app/zh-CN` 生成配置
+
+然后在 GitHub 仓库中添加 `Repository variables`：
+
+- `PUBLIC_GISCUS_REPO`
+- `PUBLIC_GISCUS_REPO_ID`
+- `PUBLIC_GISCUS_CATEGORY`
+- `PUBLIC_GISCUS_CATEGORY_ID`
+- `PUBLIC_GISCUS_MAPPING`
+- `PUBLIC_GISCUS_THEME`
+- `PUBLIC_GISCUS_LANG`
+
+推荐值：
+
+- `PUBLIC_GISCUS_REPO=JJyun-ustc/yunn-blog`
+- `PUBLIC_GISCUS_MAPPING=pathname`
+- `PUBLIC_GISCUS_THEME=preferred_color_scheme`
+- `PUBLIC_GISCUS_LANG=zh-CN`
+
+## TinaCMS 后台配置
+
+后台地址：
+
+`/admin/`
+
+线上完整地址：
+
+`https://jjyun-ustc.github.io/yunn-blog/admin/`
+
+TinaCMS 使用 Tina Cloud。要让线上后台可登录，需要：
+
+1. 在 Tina Cloud 中创建并绑定仓库 `JJyun-ustc/yunn-blog`
+2. 确认 `main` 分支已完成索引
+3. 在 Tina Cloud 的 `Site URLs` 中加入：
+   - `https://jjyun-ustc.github.io`
+   - 如可填写，也建议加入 `https://jjyun-ustc.github.io/yunn-blog`
+4. 在 GitHub 仓库 `Actions secrets` 中配置：
+   - `TINA_PUBLIC_CLIENT_ID`
+   - `TINA_TOKEN`
+
+注意：
+
+- 这两个值必须放在 `Repository secrets`，不是 `variables`
+- 如果 Tina Cloud 项目重建过，要重新复制新的 `Client ID` 和 `Token`
+- `tina/tina-lock.json` 已纳入仓库，用于 Tina Cloud 正确索引分支
+
+## 环境变量
+
+本地可参考仓库根目录下的 `.env.example`：
+
+```bash
+PUBLIC_GISCUS_REPO=JJyun-ustc/yunn-blog
+PUBLIC_GISCUS_REPO_ID=
+PUBLIC_GISCUS_CATEGORY=Announcements
+PUBLIC_GISCUS_CATEGORY_ID=
+PUBLIC_GISCUS_MAPPING=pathname
+PUBLIC_GISCUS_THEME=preferred_color_scheme
+PUBLIC_GISCUS_LANG=zh-CN
+
+TINA_PUBLIC_CLIENT_ID=
+TINA_TOKEN=
 ```
 
-### 配置评论系统
+## 常见说明
 
-1. 创建 GitHub 仓库并启用 Discussions
-2. 访问 https://giscus.app/zh-CN 获取配置
-3. 编辑 `src/components/Comments.astro`
+- 普通访客不能直接修改博客页面
+- 评论用户只能通过 GitHub 账号在 Giscus 中发表评论
+- 真正能修改站点内容的人，是有仓库写权限的人，或者有 TinaCMS 后台编辑权限的人
+- 页面更新机制是：内容变更 -> GitHub Actions 构建 -> GitHub Pages 重新部署
 
-详细步骤请查看 [DEPLOY.md](./DEPLOY.md)。
+## 发布
 
-## 🚀 部署
+提交并推送：
 
-### 部署到 GitHub Pages
+```bash
+git add .
+git commit -m "Update README"
+git push origin main
+```
 
-详细部署指南请查看 **[DEPLOY.md](./DEPLOY.md)**，包含：
-- 环境搭建
-- GitHub 账号注册
-- 仓库创建
-- 代码上传
-- GitHub Pages 配置
-- 评论系统配置
-- 常见问题解答
-
-### 其他部署平台
-
-博客也可以部署到：
-- **Vercel** - 推荐，简单快速
-- **Netlify** - 功能强大
-- **Cloudflare Pages** - 全球 CDN
-
-## 🛠️ 技术栈
-
-- **框架**: [Astro](https://astro.build) - 现代化静态站点生成器
-- **样式**: [Tailwind CSS](https://tailwindcss.com) - 实用优先的 CSS 框架
-- **内容**: [TinaCMS](https://tinacms.org) - 可视化内容管理
-- **部署**: GitHub Pages
-- **评论**: [Giscus](https://giscus.app) - 基于 GitHub Discussions
-
-## 📖 文档
-
-- [部署指南](./DEPLOY.md) - 小白专用的详细部署教程
-- [Astro 文档](https://docs.astro.build)
-- [Tailwind CSS 文档](https://tailwindcss.com/docs)
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 📄 许可证
-
-MIT License
-
-## 🙏 致谢
-
-- [Astro](https://astro.build) - 优秀的静态站点生成器
-- [Tailwind CSS](https://tailwindcss.com) - 强大的 CSS 框架
-- [Giscus](https://giscus.app) - 简洁的评论系统
-
----
-
-**Made with ❤️ by yunn_**
+推送后到 GitHub 的 `Actions` 查看最新 `Deploy to GitHub Pages` 工作流状态。
