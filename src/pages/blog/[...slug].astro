@@ -1,0 +1,46 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { calculateReadingTime, formatWordCount } from '../../utils/readingTime';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const sortedPosts = posts
+		.filter(post => !post.data.draft)
+		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+	return sortedPosts.map((post, index) => {
+		const prevPost = index > 0 ? sortedPosts[index - 1] : null;
+		const nextPost = index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null;
+
+		return {
+			params: { slug: post.id },
+			props: { post, prevPost, nextPost }
+		};
+	});
+}
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	prevPost: CollectionEntry<'blog'> | null;
+	nextPost: CollectionEntry<'blog'> | null;
+}
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content, headings } = await render(post);
+
+// 计算阅读时间和字数
+const rawContent = await post.render();
+const readingStats = calculateReadingTime(rawContent);
+---
+
+<BlogPost 
+	{...post.data} 
+	headings={headings}
+	readingTime={readingStats.time}
+	wordCount={formatWordCount(readingStats.words)}
+	prevPost={prevPost}
+	nextPost={nextPost}
+>
+	<Content />
+</BlogPost>

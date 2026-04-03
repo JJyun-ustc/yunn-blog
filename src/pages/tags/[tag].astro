@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { SITE_TITLE } from '../../consts';
+
+export function getStaticPaths() {
+  const posts = getCollection('blog');
+  const tags = new Set<string>();
+
+  posts.then(allPosts => {
+    allPosts.forEach(post => {
+      (post.data.tags || []).forEach(tag => tags.add(tag));
+    });
+  });
+
+  return Array.from(tags).map(tag => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter(post => (post.data.tags || []).includes(tag) && !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`${tag} - ${SITE_TITLE}`} description={`标签: ${tag}`} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <nav class="breadcrumb">
+        <a href="/tags">标签</a>
+        <span>/</span>
+        <span>{tag}</span>
+      </nav>
+      <h1>#{tag}</h1>
+      <p class="page-desc">共 {posts.length} 篇文章</p>
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--primary);
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

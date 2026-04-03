@@ -1,0 +1,163 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// 只显示 h2 和 h3
+const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+  <nav class="toc" aria-label="文章目录">
+    <div class="toc-header">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="8" y1="6" x2="21" y2="6"></line>
+        <line x1="8" y1="12" x2="21" y2="12"></line>
+        <line x1="8" y1="18" x2="21" y2="18"></line>
+        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+      </svg>
+      <span>目录</span>
+    </div>
+    <ul class="toc-list">
+      {tocHeadings.map((heading) => (
+        <li class={`toc-item toc-depth-${heading.depth}`}>
+          <a href={`#${heading.slug}`} class="toc-link">
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  // 滚动高亮当前章节
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = document.querySelectorAll('h2[id], h3[id]');
+
+  function highlightActiveSection() {
+    let currentActive = null;
+
+    headings.forEach((heading) => {
+      const rect = heading.getBoundingClientRect();
+      if (rect.top <= 100) {
+        currentActive = heading;
+      }
+    });
+
+    tocLinks.forEach((link) => {
+      link.classList.remove('active');
+      if (currentActive && link.getAttribute('href') === `#${currentActive.id}`) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  // 平滑滚动
+  tocLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href')?.slice(1);
+      const targetElement = document.getElementById(targetId || '');
+
+      if (targetElement) {
+        const headerOffset = 80;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+
+  window.addEventListener('scroll', highlightActiveSection);
+  highlightActiveSection();
+</script>
+
+<style>
+  .toc {
+    position: sticky;
+    top: 100px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .toc-item {
+    margin: 0;
+  }
+
+  .toc-depth-2 {
+    padding-left: 0;
+  }
+
+  .toc-depth-3 {
+    padding-left: 1rem;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    border-left: 2px solid transparent;
+  }
+
+  .toc-link:hover {
+    background: var(--gradient-start);
+    color: var(--primary);
+    transform: translateX(2px);
+  }
+
+  .toc-link.active {
+    background: var(--gradient-start);
+    color: var(--primary);
+    border-left-color: var(--primary);
+    font-weight: 500;
+  }
+
+  @media (max-width: 1200px) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

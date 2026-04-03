@@ -1,0 +1,90 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const posts = await getCollection('blog');
+const tags: Record<string, number> = {};
+
+posts.forEach(post => {
+  (post.data.tags || []).forEach(tag => {
+    tags[tag] = (tags[tag] || 0) + 1;
+  });
+});
+
+const sortedTags = Object.entries(tags).sort((a, b) => b[1] - a[1]);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`标签 - ${SITE_TITLE}`} description="文章标签" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>标签</h1>
+      <p class="page-desc">共 {sortedTags.length} 个标签</p>
+      <div class="tags-cloud">
+        {sortedTags.map(([tag, count]) => (
+          <a href={`/tags/${encodeURIComponent(tag)}/`} class="tag-item">
+            <span class="tag-name">{tag}</span>
+            <span class="tag-count">{count}</span>
+          </a>
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .tag-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+    border-color: var(--primary);
+  }
+
+  .tag-name {
+    font-weight: 500;
+  }
+
+  .tag-count {
+    font-size: 0.75rem;
+    color: var(--primary);
+    background: var(--gradient-start);
+    padding: 0.1rem 0.4rem;
+    border-radius: 9999px;
+  }
+</style>

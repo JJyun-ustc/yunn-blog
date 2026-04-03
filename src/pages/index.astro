@@ -1,0 +1,164 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="hero">
+        <h1 class="hero-title">欢迎来到 <span class="highlight">yunn_</span></h1>
+        <p class="hero-desc">一个记录生活点滴、分享心情随笔的小角落</p>
+      </section>
+
+      <section class="recent-posts">
+        <div class="section-header">
+          <h2>最新文章</h2>
+          <a href="/blog" class="view-all">查看全部 →</a>
+        </div>
+        <div class="posts-grid">
+          {posts.map((post) => (
+            <BlogCard post={post} />
+          ))}
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3>随笔记录</h3>
+          <p>记录生活中的点滴感悟与美好瞬间</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏷️</div>
+          <h3>分类整理</h3>
+          <p>按主题分类，方便查找感兴趣的内容</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>快速搜索</h3>
+          <p>支持全文搜索，快速定位想看的内容</p>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .highlight {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .recent-posts {
+    margin: 3rem 0;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .view-all {
+    color: var(--primary);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .view-all:hover {
+    color: var(--primary-dark);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .feature-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .feature-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,180 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const searchablePosts = posts
+  .filter(post => !post.data.draft)
+  .map(post => ({
+    slug: post.slug,
+    title: post.data.title,
+    description: post.data.description,
+    category: post.data.category || '随笔',
+    tags: post.data.tags || [],
+    pubDate: post.data.pubDate.toISOString(),
+  }));
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`搜索 - ${SITE_TITLE}`} description="搜索文章" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>搜索</h1>
+      <div class="search-container">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="输入关键词搜索..."
+          autocomplete="off"
+        />
+      </div>
+      <div id="search-results" class="search-results"></div>
+    </main>
+    <Footer />
+
+    <script define:vars={{ searchablePosts }}>
+      const searchInput = document.getElementById('search-input');
+      const searchResults = document.getElementById('search-results');
+      const posts = searchablePosts;
+
+      function search(query) {
+        if (!query.trim()) {
+          searchResults.innerHTML = '<p class="search-hint">输入关键词开始搜索</p>';
+          return;
+        }
+
+        const q = query.toLowerCase();
+        const results = posts.filter(post => {
+          return post.title.toLowerCase().includes(q) ||
+                 post.description.toLowerCase().includes(q) ||
+                 post.tags.some(tag => tag.toLowerCase().includes(q)) ||
+                 post.category.toLowerCase().includes(q);
+        });
+
+        if (results.length === 0) {
+          searchResults.innerHTML = '<p class="no-results">没有找到相关文章</p>';
+          return;
+        }
+
+        searchResults.innerHTML = results.map(post => `
+          <a href="/blog/${post.slug}/" class="search-result-item">
+            <span class="result-category">${post.category}</span>
+            <h3 class="result-title">${post.title}</h3>
+            <p class="result-desc">${post.description}</p>
+            <div class="result-tags">
+              ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+          </a>
+        `).join('');
+      }
+
+      searchInput.addEventListener('input', (e) => {
+        search(e.target.value);
+      });
+
+      // 初始状态
+      searchResults.innerHTML = '<p class="search-hint">输入关键词开始搜索</p>';
+    </script>
+  </body>
+</html>
+
+<style>
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .search-container {
+    margin-bottom: 2rem;
+  }
+
+  #search-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 1rem 1.25rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card-bg);
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+  }
+
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 700px;
+  }
+
+  .search-hint, .no-results {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .search-result-item {
+    display: block;
+    padding: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .search-result-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px var(--shadow);
+    border-color: var(--primary);
+  }
+
+  .result-category {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: white;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .result-desc {
+    margin: 0 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background: var(--gradient-start);
+    color: var(--primary);
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+</style>

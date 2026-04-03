@@ -1,0 +1,69 @@
+---
+import { SITE_TITLE, SITE_AUTHOR, SITE_DESCRIPTION } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'WebSite' | 'Article' | 'Person';
+  datePublished?: Date;
+  dateModified?: Date;
+  author?: string;
+  image?: string;
+}
+
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  type = 'WebSite',
+  datePublished,
+  dateModified,
+  author = SITE_AUTHOR,
+  image
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString() || 'https://example.com';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': type,
+  ...(type === 'Article' && {
+    headline: title,
+    description: description,
+    author: {
+      '@type': 'Person',
+      name: author
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_TITLE,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/favicon.svg`
+      }
+    },
+    ...(datePublished && { datePublished: datePublished.toISOString() }),
+    ...(dateModified && { dateModified: dateModified.toISOString() }),
+    ...(image && { image }),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': Astro.url.toString()
+    }
+  }),
+  ...(type === 'WebSite' && {
+    name: title,
+    description: description,
+    author: {
+      '@type': 'Person',
+      name: author
+    },
+    url: siteUrl
+  }),
+  ...(type === 'Person' && {
+    name: author,
+    description: description,
+    url: siteUrl
+  })
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

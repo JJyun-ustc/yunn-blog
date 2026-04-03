@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { SITE_TITLE } from '../../consts';
+
+export function getStaticPaths() {
+  const posts = getCollection('blog');
+  const categories = new Set<string>();
+
+  posts.then(allPosts => {
+    allPosts.forEach(post => {
+      const cat = post.data.category || '随笔';
+      categories.add(cat);
+    });
+  });
+
+  return Array.from(categories).map(category => ({
+    params: { category },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter(post => (post.data.category || '随笔') === category && !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`${category} - ${SITE_TITLE}`} description={`分类: ${category}`} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <nav class="breadcrumb">
+        <a href="/categories">分类</a>
+        <span>/</span>
+        <span>{category}</span>
+      </nav>
+      <h1>{category}</h1>
+      <p class="page-desc">共 {posts.length} 篇文章</p>
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--primary);
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

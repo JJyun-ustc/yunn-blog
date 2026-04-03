@@ -1,0 +1,100 @@
+---
+interface Props {
+  // Giscus 配置参数 - 用户需要替换为自己的仓库信息
+  repo?: string;           // 格式: 'owner/repo'
+  repoId?: string;
+  category?: string;
+  categoryId?: string;
+  mapping?: 'pathname' | 'url' | 'title' | 'og:title' | 'specific' | 'number';
+  theme?: 'light' | 'dark' | 'preferred_color_scheme' | 'transparent_dark' | 'dark_dimmed' | 'dark_high_contrast';
+  lang?: string;
+}
+
+// 默认配置 - 用户需要修改这些值
+const {
+  repo = 'your-username/your-blog-repo',
+  repoId = 'your-repo-id',
+  category = 'Announcements',
+  categoryId = 'your-category-id',
+  mapping = 'pathname',
+  theme = 'preferred_color_scheme',
+  lang = 'zh-CN'
+} = Astro.props;
+---
+
+<div class="comments-section">
+  <div class="comments-header">
+    <h3>评论区</h3>
+    <p class="comments-hint">使用 GitHub 账号参与讨论</p>
+  </div>
+  
+  <div class="giscus-container">
+    <script 
+      src="https://giscus.app/client.js"
+      data-repo={repo}
+      data-repo-id={repoId}
+      data-category={category}
+      data-category-id={categoryId}
+      data-mapping={mapping}
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme={theme}
+      data-lang={lang}
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </div>
+
+  <noscript>
+    <p class="noscript-hint">
+      评论功能需要 JavaScript 支持。请启用 JavaScript 以参与讨论。
+    </p>
+  </noscript>
+</div>
+
+<style>
+  .comments-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .comments-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .comments-header h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .comments-hint {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .giscus-container {
+    min-height: 200px;
+  }
+
+  .noscript-hint {
+    text-align: center;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+  }
+
+  /* Giscus iframe 样式调整 */
+  :global(.giscus) {
+    max-width: 100%;
+  }
+</style>

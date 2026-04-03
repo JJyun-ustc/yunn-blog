@@ -1,0 +1,322 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, SITE_AUTHOR } from '../consts';
+
+// 友链数据 - 用户可以添加自己的友链
+const friends = [
+  {
+    name: '示例友链1',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=example1',
+    description: '这是一个示例友链描述',
+  },
+  {
+    name: '示例友链2',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=example2',
+    description: '这是另一个示例友链描述',
+  },
+];
+
+// 本站信息
+const siteInfo = {
+  name: SITE_TITLE,
+  author: SITE_AUTHOR,
+  url: 'https://your-domain.com',
+  description: '记录生活中的点滴美好',
+  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=yunn',
+};
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`友情链接 - ${SITE_TITLE}`} description="友情链接" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="page-header">
+        <h1>友情链接</h1>
+        <p class="page-desc">那些有趣的灵魂和他们的博客</p>
+      </div>
+
+      <section class="my-info">
+        <h2>本站信息</h2>
+        <div class="info-card">
+          <div class="info-avatar">
+            <img src={siteInfo.avatar} alt={siteInfo.name} />
+          </div>
+          <div class="info-content">
+            <h3>{siteInfo.name}</h3>
+            <p class="info-author">博主：{siteInfo.author}</p>
+            <p class="info-desc">{siteInfo.description}</p>
+            <div class="info-url">
+              <span>网址：</span>
+              <a href={siteInfo.url} target="_blank">{siteInfo.url}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="friends-section">
+        <h2>友情链接</h2>
+        {friends.length > 0 ? (
+          <div class="friends-grid">
+            {friends.map((friend) => (
+              <a href={friend.url} target="_blank" rel="noopener noreferrer" class="friend-card">
+                <div class="friend-avatar">
+                  <img src={friend.avatar} alt={friend.name} loading="lazy" />
+                </div>
+                <div class="friend-content">
+                  <h3>{friend.name}</h3>
+                  <p>{friend.description}</p>
+                </div>
+                <div class="friend-link-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="no-friends">暂无友链，欢迎申请交换友链！</p>
+        )}
+      </section>
+
+      <section class="apply-section">
+        <h2>申请友链</h2>
+        <div class="apply-content">
+          <p>欢迎交换友链！请确保你的网站满足以下条件：</p>
+          <ul>
+            <li>网站内容积极向上，无违法违规内容</li>
+            <li>网站可以正常访问</li>
+            <li>优先考虑技术博客或个人博客</li>
+          </ul>
+          <p>请在评论区或通过邮件提供以下信息：</p>
+          <ul>
+            <li>网站名称</li>
+            <li>网站地址</li>
+            <li>网站描述（简短介绍）</li>
+            <li>头像链接（可选）</li>
+          </ul>
+          <p class="apply-note">
+            <strong>注意：</strong>添加友链后请在本站留言告知，我会尽快添加你的链接。
+          </p>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    margin: 0 0 0.5rem;
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .my-info, .friends-section, .apply-section {
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .info-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: box-shadow 0.2s;
+  }
+
+  .info-card:hover {
+    box-shadow: 0 8px 16px var(--shadow);
+  }
+
+  .info-avatar {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--gradient-start);
+  }
+
+  .info-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info-content {
+    flex: 1;
+  }
+
+  .info-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .info-author {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .info-desc {
+    margin: 0 0 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .info-url {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .info-url a {
+    color: var(--primary);
+  }
+
+  .friends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .friend-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    align-items: center;
+  }
+
+  .friend-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px var(--shadow);
+    border-color: var(--primary);
+  }
+
+  .friend-avatar {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--gradient-start);
+  }
+
+  .friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .friend-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .friend-content h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .friend-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .friend-link-icon {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .friend-card:hover .friend-link-icon {
+    color: var(--primary);
+  }
+
+  .no-friends {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+
+  .apply-content {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    line-height: 1.8;
+  }
+
+  .apply-content p {
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+  }
+
+  .apply-content ul {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .apply-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .apply-note {
+    padding: 1rem;
+    background: var(--gradient-start);
+    border-radius: 8px;
+    margin-bottom: 0 !important;
+  }
+
+  @media (max-width: 768px) {
+    .info-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .friends-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

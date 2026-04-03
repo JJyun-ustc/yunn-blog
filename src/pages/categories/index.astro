@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const posts = await getCollection('blog');
+const categories: Record<string, number> = {};
+
+posts.forEach(post => {
+  const cat = post.data.category || '随笔';
+  categories[cat] = (categories[cat] || 0) + 1;
+});
+
+const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={`分类 - ${SITE_TITLE}`} description="文章分类" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>分类</h1>
+      <p class="page-desc">共 {sortedCategories.length} 个分类</p>
+      <div class="categories-grid">
+        {sortedCategories.map(([category, count]) => (
+          <a href={`/categories/${encodeURIComponent(category)}/`} class="category-card">
+            <span class="category-name">{category}</span>
+            <span class="category-count">{count} 篇</span>
+          </a>
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .page-desc {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .category-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px var(--shadow);
+    border-color: var(--primary);
+  }
+
+  .category-name {
+    font-weight: 600;
+  }
+
+  .category-count {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    background: var(--gradient-start);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+  }
+</style>

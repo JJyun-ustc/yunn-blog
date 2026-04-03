@@ -1,0 +1,82 @@
+---
+// 返回顶部按钮组件
+---
+
+<button id="back-to-top" class="back-to-top" aria-label="返回顶部">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<script>
+  const backToTopButton = document.getElementById('back-to-top');
+
+  function toggleBackToTopButton() {
+    if (window.scrollY > 300) {
+      backToTopButton?.classList.add('visible');
+    } else {
+      backToTopButton?.classList.remove('visible');
+    }
+  }
+
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  backToTopButton?.addEventListener('click', scrollToTop);
+  window.addEventListener('scroll', toggleBackToTopButton);
+  
+  // 初始化状态
+  toggleBackToTopButton();
+</script>
+
+<style>
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+  }
+
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .back-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .back-to-top:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    .back-to-top {
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+    }
+  }
+</style>
