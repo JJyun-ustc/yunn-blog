@@ -8,12 +8,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // 重要：替换 '你的用户名' 为你的 GitHub 用户名
-  // 例如：site: 'https://zhangsan.github.io/yunn-blog'
-  site: 'https://你的用户名.github.io/yunn-blog',
+  // GitHub Pages 地址
+  site: 'https://jjyun-ustc.github.io',
   
-  // 如果仓库名不是你的用户名.github.io，需要添加 base 配置
-  // 例如仓库名是 yunn-blog，base 应该是 '/yunn-blog/'
+  // 仓库名作为 base 路径（关键配置）
   base: '/yunn-blog/',
   
   integrations: [mdx(), sitemap()],
