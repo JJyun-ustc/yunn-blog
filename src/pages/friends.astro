@@ -2,45 +2,33 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE, SITE_AUTHOR } from '../consts';
+import Comments from '../components/Comments.astro';
+import friendLinks from '../data/friend-links.json';
+import { SITE_TITLE } from '../consts';
+import { withBase } from '../utils/paths';
 
-// 友链数据 - 用户可以添加自己的友链
-const friends = [
-  {
-    name: '示例友链1',
-    url: 'https://example.com',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=example1',
-    description: '这是一个示例友链描述',
-  },
-  {
-    name: '示例友链2',
-    url: 'https://example.com',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=example2',
-    description: '这是另一个示例友链描述',
-  },
-];
-
-// 本站信息
 const siteInfo = {
-  name: SITE_TITLE,
-  author: SITE_AUTHOR,
-  url: 'https://your-domain.com',
-  description: '记录生活中的点滴美好',
-  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=yunn',
+  name: 'YUNN-BLOG',
+  author: '芠芸',
+  url: 'https://jjyun-ustc.github.io/yunn-blog/',
+  description: '直面生活的痛击',
+  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
 };
+
+const approvedLinks = friendLinks.approved ?? [];
 ---
 
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={`友情链接 - ${SITE_TITLE}`} description="友情链接" />
+    <BaseHead title={`相关链接 - ${SITE_TITLE}`} description="相关链接推引" />
   </head>
   <body>
     <Header />
     <main>
       <div class="page-header">
-        <h1>友情链接</h1>
-        <p class="page-desc">那些有趣的灵魂和他们的博客</p>
+        <h1>相关链接</h1>
+        <p class="page-desc">相关链接推引</p>
       </div>
 
       <section class="my-info">
@@ -55,20 +43,24 @@ const siteInfo = {
             <p class="info-desc">{siteInfo.description}</p>
             <div class="info-url">
               <span>网址：</span>
-              <a href={siteInfo.url} target="_blank">{siteInfo.url}</a>
+              <a href={siteInfo.url} target="_blank" rel="noopener noreferrer">{siteInfo.url}</a>
             </div>
           </div>
         </div>
       </section>
 
       <section class="friends-section">
-        <h2>友情链接</h2>
-        {friends.length > 0 ? (
+        <div class="section-heading">
+          <h2>相关链接展示</h2>
+          <a href={withBase('admin/')} target="_blank" rel="noreferrer">后台处理展示</a>
+        </div>
+
+        {approvedLinks.length > 0 ? (
           <div class="friends-grid">
-            {friends.map((friend) => (
+            {approvedLinks.map((friend) => (
               <a href={friend.url} target="_blank" rel="noopener noreferrer" class="friend-card">
                 <div class="friend-avatar">
-                  <img src={friend.avatar} alt={friend.name} loading="lazy" />
+                  <img src={withBase(friend.avatar)} alt={friend.name} loading="lazy" />
                 </div>
                 <div class="friend-content">
                   <h3>{friend.name}</h3>
@@ -85,30 +77,18 @@ const siteInfo = {
             ))}
           </div>
         ) : (
-          <p class="no-friends">暂无友链，欢迎申请交换友链！</p>
+          <p class="no-friends">当前还没有公开展示的相关链接，欢迎在下方留言申请。</p>
         )}
       </section>
 
       <section class="apply-section">
-        <h2>申请友链</h2>
+        <h2>申请展示</h2>
         <div class="apply-content">
-          <p>欢迎交换友链！请确保你的网站满足以下条件：</p>
-          <ul>
-            <li>网站内容积极向上，无违法违规内容</li>
-            <li>网站可以正常访问</li>
-            <li>优先考虑技术博客或个人博客</li>
-          </ul>
-          <p>请在评论区或通过邮件提供以下信息：</p>
-          <ul>
-            <li>网站名称</li>
-            <li>网站地址</li>
-            <li>网站描述（简短介绍）</li>
-            <li>头像链接（可选）</li>
-          </ul>
           <p class="apply-note">
-            <strong>注意：</strong>添加友链后请在本站留言告知，我会尽快添加你的链接。
+            <strong>注意事项：</strong>请在下方留言中留下站点名称、链接、简介和头像地址；我会自行处理，并在审核后选择是否展示在上方区域。
           </p>
         </div>
+        <Comments />
       </section>
     </main>
     <Footer />
@@ -130,7 +110,9 @@ const siteInfo = {
     margin: 0;
   }
 
-  .my-info, .friends-section, .apply-section {
+  .my-info,
+  .friends-section,
+  .apply-section {
     margin-bottom: 3rem;
   }
 
@@ -139,6 +121,26 @@ const siteInfo = {
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--border);
+  }
+
+  .section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .section-heading a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.95rem;
   }
 
   .info-card {
@@ -284,28 +286,15 @@ const siteInfo = {
     border: 1px solid var(--border);
     border-radius: 12px;
     line-height: 1.8;
-  }
-
-  .apply-content p {
-    margin: 0 0 1rem;
-    color: var(--text-secondary);
-  }
-
-  .apply-content ul {
-    margin: 0 0 1rem;
-    padding-left: 1.5rem;
-    color: var(--text-secondary);
-  }
-
-  .apply-content li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .apply-note {
     padding: 1rem;
     background: var(--gradient-start);
     border-radius: 8px;
-    margin-bottom: 0 !important;
+    margin: 0;
+    color: var(--text);
   }
 
   @media (max-width: 768px) {
@@ -313,6 +302,11 @@ const siteInfo = {
       flex-direction: column;
       align-items: center;
       text-align: center;
+    }
+
+    .section-heading {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .friends-grid {

@@ -89,6 +89,96 @@ export default defineConfig({
           },
         ],
       },
+      {
+        name: "homepage_gallery",
+        label: "Homepage Gallery",
+        path: "src/data",
+        match: {
+          include: "homepage-gallery",
+        },
+        format: "json",
+        fields: [
+          {
+            type: "object",
+            name: "images",
+            label: "Images",
+            list: true,
+            fields: [
+              {
+                type: "image",
+                name: "image",
+                label: "Image",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "alt",
+                label: "Alt Text",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "title",
+                label: "Title",
+              },
+              {
+                type: "string",
+                name: "description",
+                label: "Description",
+                ui: {
+                  component: "textarea",
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "friend_links",
+        label: "Friend Links",
+        path: "src/data",
+        match: {
+          include: "friend-links",
+        },
+        format: "json",
+        fields: [
+          {
+            type: "object",
+            name: "approved",
+            label: "Approved Links",
+            list: true,
+            fields: [
+              {
+                type: "string",
+                name: "name",
+                label: "Name",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "url",
+                label: "URL",
+                required: true,
+              },
+              {
+                type: "image",
+                name: "avatar",
+                label: "Avatar",
+                required: true,
+              },
+              {
+                type: "string",
+                name: "description",
+                label: "Description",
+                required: true,
+                ui: {
+                  component: "textarea",
+                },
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 });

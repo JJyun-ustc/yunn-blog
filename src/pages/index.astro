@@ -6,11 +6,14 @@ import BlogCard from '../components/BlogCard.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 import { withBase } from '../utils/paths';
+import galleryData from '../data/homepage-gallery.json';
 
 const posts = (await getCollection('blog'))
-  .filter(post => !post.data.draft)
+  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 6);
+
+const galleryItems = galleryData.images ?? [];
 ---
 
 <!doctype html>
@@ -22,8 +25,8 @@ const posts = (await getCollection('blog'))
     <Header />
     <main>
       <section class="hero">
-        <h1 class="hero-title">欢迎来到 <span class="highlight">yunn_</span></h1>
-        <p class="hero-desc">一个记录生活点滴、分享心情随笔的小角落</p>
+        <h1 class="hero-title">芠芸的<span class="highlight">发癫网页</span></h1>
+        <p class="hero-desc">记录点滴，分享随笔</p>
       </section>
 
       <section class="recent-posts">
@@ -38,22 +41,35 @@ const posts = (await getCollection('blog'))
         </div>
       </section>
 
-      <section class="features">
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h3>随笔记录</h3>
-          <p>记录生活中的点滴感悟与美好瞬间</p>
+      <section class="gallery-section">
+        <div class="section-header">
+          <div>
+            <h2>图片展示窗口</h2>
+            <p class="section-subtitle">管理员可在后台上传图片，首页会在这里展示。</p>
+          </div>
+          <a href={withBase('admin/')} class="manage-link" target="_blank" rel="noreferrer">进入后台</a>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🏷️</div>
-          <h3>分类整理</h3>
-          <p>按主题分类，方便查找感兴趣的内容</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-          <h3>快速搜索</h3>
-          <p>支持全文搜索，快速定位想看的内容</p>
-        </div>
+
+        {galleryItems.length > 0 ? (
+          <div class="gallery-grid">
+            {galleryItems.map((item) => (
+              <figure class="gallery-card">
+                <img src={withBase(item.image)} alt={item.alt} loading="lazy" />
+                {(item.title || item.description) && (
+                  <figcaption>
+                    {item.title && <strong>{item.title}</strong>}
+                    {item.description && <p>{item.description}</p>}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <div class="gallery-empty">
+            <p>这里已经预留好了图片展示区。</p>
+            <p>你可以在 `管理后台` 里上传图片并维护展示内容。</p>
+          </div>
+        )}
       </section>
     </main>
     <Footer />
@@ -63,36 +79,41 @@ const posts = (await getCollection('blog'))
 <style>
   .hero {
     text-align: center;
-    padding: 4rem 0;
+    padding: 4rem 0 3rem;
   }
 
   .hero-title {
-    font-size: 3rem;
+    font-size: clamp(2.5rem, 6vw, 4.25rem);
     margin-bottom: 1rem;
-    line-height: 1.2;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
   }
 
   .highlight {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: inline-block;
+    margin-left: 0.2em;
+    background: linear-gradient(135deg, #e8572a, #ffb703);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .hero-desc {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     color: var(--text-secondary);
     margin: 0;
   }
 
-  .recent-posts {
+  .recent-posts,
+  .gallery-section {
     margin: 3rem 0;
   }
 
   .section-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: end;
+    gap: 1rem;
     margin-bottom: 1.5rem;
   }
 
@@ -101,15 +122,24 @@ const posts = (await getCollection('blog'))
     font-size: 1.5rem;
   }
 
-  .view-all {
-    color: var(--primary);
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: color 0.2s;
+  .section-subtitle {
+    margin: 0.35rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
   }
 
-  .view-all:hover {
+  .view-all,
+  .manage-link {
+    color: var(--primary);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .view-all:hover,
+  .manage-link:hover {
     color: var(--primary-dark);
+    transform: translateY(-1px);
   }
 
   .posts-grid {
@@ -118,47 +148,67 @@ const posts = (await getCollection('blog'))
     gap: 1.5rem;
   }
 
-  .features {
+  .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
   }
 
-  .feature-card {
-    text-align: center;
-    padding: 2rem 1.5rem;
+  .gallery-card,
+  .gallery-empty {
     background: var(--card-bg);
-    border-radius: 12px;
     border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--shadow);
   }
 
-  .feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+  .gallery-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
   }
 
-  .feature-card h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.1rem;
+  .gallery-card figcaption {
+    padding: 1rem;
   }
 
-  .feature-card p {
+  .gallery-card strong {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 1rem;
+  }
+
+  .gallery-card p,
+  .gallery-empty p {
     margin: 0;
-    font-size: 0.9rem;
     color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .gallery-empty {
+    padding: 2rem 1.5rem;
+    border-style: dashed;
+    text-align: center;
   }
 
   @media (max-width: 768px) {
-    .hero-title {
-      font-size: 2rem;
+    .hero {
+      padding-top: 3rem;
     }
 
     .hero-desc {
       font-size: 1rem;
     }
 
-    .posts-grid {
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .posts-grid,
+    .gallery-grid {
       grid-template-columns: 1fr;
     }
   }
