@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="homepage placeholder 3">
+  <rect width="1200" height="900" fill="#f5efe8" />
+  <rect x="0" y="0" width="1200" height="190" fill="#c95f37" opacity="0.92" />
+  <rect x="0" y="710" width="1200" height="190" fill="#ffcf99" opacity="0.92" />
+  <circle cx="930" cy="380" r="170" fill="#ffd7b0" />
+  <circle cx="350" cy="500" r="140" fill="#f0b36d" opacity="0.78" />
+  <text x="600" y="390" text-anchor="middle" font-size="76" font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#8a3316">Replace Me 3</text>
+  <text x="600" y="470" text-anchor="middle" font-size="34" font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#745d4d">Daily updates are fine, but each change still needs a git push</text>
+</svg>

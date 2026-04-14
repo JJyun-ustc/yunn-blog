@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="homepage placeholder 2">
+  <rect width="1200" height="900" fill="#e9f0ea" />
+  <rect x="110" y="120" width="980" height="660" rx="56" fill="#f9fcf8" />
+  <path d="M180 700 L410 430 L600 620 L760 500 L980 700 Z" fill="#8db596" />
+  <circle cx="330" cy="280" r="84" fill="#d2a24c" />
+  <text x="600" y="260" text-anchor="middle" font-size="76" font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#315347">Replace Me 2</text>
+  <text x="600" y="340" text-anchor="middle" font-size="34" font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#5b7267">Change the file name in homepage-gallery.json when needed</text>
+</svg>

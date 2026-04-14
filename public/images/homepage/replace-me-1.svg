@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="homepage placeholder 1">
+  <rect width="1200" height="900" fill="#f3ede4" />
+  <circle cx="220" cy="220" r="120" fill="#e9b872" opacity="0.7" />
+  <circle cx="940" cy="250" r="180" fill="#d97b4f" opacity="0.6" />
+  <rect x="120" y="540" width="960" height="180" rx="40" fill="#fffaf2" />
+  <text x="600" y="400" text-anchor="middle" font-size="76" font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#8f3f21">Replace Me 1</text>
+  <text x="600" y="635" text-anchor="middle" font-size="36" font-family="Microsoft YaHei, Segoe UI, sans-serif" fill="#7a6b61">Put your own image into public/images/homepage/</text>
+</svg>

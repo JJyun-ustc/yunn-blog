@@ -45,9 +45,9 @@ const galleryItems = galleryData.images ?? [];
         <div class="section-header">
           <div>
             <h2>图片展示窗口</h2>
-            <p class="section-subtitle">管理员可在后台上传图片，首页会在这里展示。</p>
+            <p class="section-subtitle">把图片放进固定目录，再改一次展示数据，就能更新首页图片区。</p>
           </div>
-          <a href={withBase('admin/')} class="manage-link" target="_blank" rel="noreferrer">进入后台</a>
+          <span class="manage-hint">推荐目录：`public/images/homepage/`</span>
         </div>
 
         {galleryItems.length > 0 ? (
@@ -67,7 +67,7 @@ const galleryItems = galleryData.images ?? [];
         ) : (
           <div class="gallery-empty">
             <p>这里已经预留好了图片展示区。</p>
-            <p>你可以在 `管理后台` 里上传图片并维护展示内容。</p>
+            <p>把图片放到 `public/images/homepage/`，再编辑 `src/data/homepage-gallery.json` 就能展示。</p>
           </div>
         )}
       </section>
@@ -128,18 +128,21 @@ const galleryItems = galleryData.images ?? [];
     font-size: 0.95rem;
   }
 
-  .view-all,
-  .manage-link {
+  .view-all {
     color: var(--primary);
     font-size: 0.95rem;
     text-decoration: none;
     transition: color 0.2s, transform 0.2s;
   }
 
-  .view-all:hover,
-  .manage-link:hover {
+  .view-all:hover {
     color: var(--primary-dark);
     transform: translateY(-1px);
+  }
+
+  .manage-hint {
+    color: var(--text-muted);
+    font-size: 0.9rem;
   }
 
   .posts-grid {
