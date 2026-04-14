@@ -68,7 +68,7 @@ const skillStops = skills
       <div class="about-content">
         <section class="about-section">
           <h2>关于博客</h2>
-          <p>{personalInfo.bio}</p>
+          <p>请输入文本 ： ）</p>
         </section>
 
         <section class="about-section">
@@ -79,6 +79,7 @@ const skillStops = skills
             <div class="skill-chart-wrap">
               <div class="skill-ring outer-ring"></div>
               <div class="skill-ring middle-ring"></div>
+              <div class="scan-ring"></div>
               <div class="skill-chart" style={`background: conic-gradient(${skillStops});`}>
                 <div class="skill-chart-hole">
                   <span class="core-title">SKILL</span>
@@ -92,18 +93,14 @@ const skillStops = skills
                 const y = Math.sin(radians);
                 const left = 50 + x * 44;
                 const top = 50 + y * 44;
-                const justify = x >= 0 ? 'flex-start' : 'flex-end';
-                const textAlign = x >= 0 ? 'left' : 'right';
 
                 return (
                   <div
                     class="skill-label"
-                    style={`left:${left}%; top:${top}%; --color:${skill.color}; justify-content:${justify}; text-align:${textAlign};`}
+                    style={`left:${left}%; top:${top}%; --color:${skill.color};`}
                   >
-                    {x < 0 && <span class="skill-name">{skill.name}</span>}
-                    <span class="skill-dot"></span>
-                    <span class="skill-line"></span>
-                    {x >= 0 && <span class="skill-name">{skill.name}</span>}
+                    <span class="skill-beacon"></span>
+                    <span class="skill-name">{skill.name}</span>
                   </div>
                 );
               })}
@@ -269,9 +266,13 @@ const skillStops = skills
     margin: 0 auto;
   }
 
-  .skill-ring {
+  .skill-ring,
+  .scan-ring {
     position: absolute;
     border-radius: 50%;
+  }
+
+  .skill-ring {
     border: 1px solid rgba(91, 140, 255, 0.22);
   }
 
@@ -284,6 +285,12 @@ const skillStops = skills
     inset: 14%;
     border-style: dashed;
     animation: orbit 18s linear infinite;
+  }
+
+  .scan-ring {
+    inset: 2%;
+    border: 1px solid rgba(35, 242, 255, 0.18);
+    box-shadow: inset 0 0 24px rgba(35, 242, 255, 0.06);
   }
 
   .skill-chart {
@@ -338,48 +345,36 @@ const skillStops = skills
   .skill-label {
     position: absolute;
     transform: translate(-50%, -50%);
-    width: 190px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.55rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color) 45%, rgba(255, 255, 255, 0.1));
+    background: linear-gradient(135deg, rgba(7, 18, 43, 0.92), rgba(25, 9, 54, 0.88));
+    box-shadow:
+      0 0 18px color-mix(in srgb, var(--color) 22%, transparent),
+      inset 0 0 14px rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
   }
 
-  .skill-dot {
-    width: 12px;
-    height: 12px;
+  .skill-beacon {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: var(--color);
     box-shadow:
-      0 0 0 5px color-mix(in srgb, var(--color) 20%, transparent),
-      0 0 18px color-mix(in srgb, var(--color) 60%, transparent);
+      0 0 0 4px color-mix(in srgb, var(--color) 16%, transparent),
+      0 0 16px color-mix(in srgb, var(--color) 70%, transparent);
     flex-shrink: 0;
-  }
-
-  .skill-line {
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--color), rgba(255, 255, 255, 0.22));
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .skill-line::after {
-    content: '';
-    position: absolute;
-    right: -1px;
-    top: 50%;
-    width: 8px;
-    height: 8px;
-    border-top: 2px solid var(--color);
-    border-right: 2px solid var(--color);
-    transform: translateY(-50%) rotate(45deg);
   }
 
   .skill-name {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 700;
     color: #edf6ff;
     text-shadow: 0 0 14px color-mix(in srgb, var(--color) 45%, transparent);
+    white-space: nowrap;
   }
 
   .timeline {
@@ -498,16 +493,11 @@ const skillStops = skills
     }
 
     .skill-label {
-      width: 130px;
-      gap: 0.35rem;
-    }
-
-    .skill-line {
-      width: 20px;
+      padding: 0.35rem 0.55rem;
     }
 
     .skill-name {
-      font-size: 0.82rem;
+      font-size: 0.76rem;
     }
   }
 </style>
