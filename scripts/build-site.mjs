@@ -20,6 +20,31 @@ function run(command) {
   });
 }
 
+function runAndCapture(command) {
+  try {
+    const output = execSync(command, {
+      cwd: rootDir,
+      stdio: 'pipe',
+      env: process.env,
+      encoding: 'utf8',
+    });
+
+    return {
+      ok: true,
+      output: output ?? '',
+    };
+  } catch (error) {
+    const stdout = typeof error?.stdout === 'string' ? error.stdout : '';
+    const stderr = typeof error?.stderr === 'string' ? error.stderr : '';
+    const message = error instanceof Error ? error.message : String(error);
+
+    return {
+      ok: false,
+      output: [stdout, stderr, message].filter(Boolean).join('\n').trim(),
+    };
+  }
+}
+
 function escapeHtml(value = '') {
   return value
     .replaceAll('&', '&amp;')
@@ -167,18 +192,21 @@ rmSync(publicAdminDir, { recursive: true, force: true });
 
 if (hasTinaCredentials) {
   console.log('Tina credentials detected, building TinaCMS admin...');
-  try {
-    run('npx tinacms build');
+  const tinaBuild = runAndCapture('npx tinacms build');
+
+  if (tinaBuild.ok) {
+    if (tinaBuild.output) {
+      process.stdout.write(tinaBuild.output);
+    }
     normalizeTinaAdminIndex();
-  } catch (error) {
-    const details = error instanceof Error ? error.message : String(error);
+  } else {
     console.warn('TinaCMS build failed, falling back to the placeholder admin page.');
-    console.warn(details);
+    console.warn(tinaBuild.output);
     writeFallbackAdminPage({
       status: 'Build Failed',
       title: 'TinaCMS 后台构建失败',
       message: '已经检测到 Tina 凭据，但 TinaCMS 后台在构建阶段失败了。请根据下方错误信息检查 Tina Cloud 索引、Schema 或构建日志。',
-      details,
+      details: tinaBuild.output || 'TinaCMS build failed without any captured output.',
     });
   }
 } else {
