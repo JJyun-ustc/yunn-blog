@@ -9,13 +9,13 @@
     {
       "image": "images/homepage/pexels-alice1-6727333.jpg",
       "alt": "替换成你的第二张首页图片",
-      "title": "图片二",
+      "title": "2",
       "description": "kth"
     },
     {
       "image": "images/homepage/pexels-ludvighedenborg-7017176.jpg",
       "alt": "替换成你的第三张首页图片",
-      "title": "图片三",
+      "title": "3",
       "description": "my color"
     }
   ]

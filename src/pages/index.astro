@@ -44,10 +44,8 @@ const galleryItems = galleryData.images ?? [];
       <section class="gallery-section">
         <div class="section-header">
           <div>
-            <h2>图片展示窗口</h2>
-            <p class="section-subtitle">把图片放进固定目录，再改一次展示数据，就能更新首页图片区。</p>
+            <h2>my cherished picture</h2>
           </div>
-          <span class="manage-hint">推荐目录：`public/images/homepage/`</span>
         </div>
 
         {galleryItems.length > 0 ? (
@@ -122,12 +120,6 @@ const galleryItems = galleryData.images ?? [];
     font-size: 1.5rem;
   }
 
-  .section-subtitle {
-    margin: 0.35rem 0 0;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-  }
-
   .view-all {
     color: var(--primary);
     font-size: 0.95rem;
@@ -138,11 +130,6 @@ const galleryItems = galleryData.images ?? [];
   .view-all:hover {
     color: var(--primary-dark);
     transform: translateY(-1px);
-  }
-
-  .manage-hint {
-    color: var(--text-muted);
-    font-size: 0.9rem;
   }
 
   .posts-grid {
