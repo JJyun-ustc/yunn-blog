@@ -10,7 +10,7 @@ const blog = defineCollection({
       description: z.string(),
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
-      heroImage: z.optional(image()),
+      heroImage: z.union([image(), z.string()]).optional(),
       category: z.string().default('随笔'),
       tags: z.array(z.string()).default([]),
       draft: z.boolean().default(false),

@@ -10,13 +10,23 @@ type Props = {
 
 const { post } = Astro.props;
 const { title, description, pubDate, heroImage, category, tags } = post.data;
+const heroImageSrc =
+  typeof heroImage === 'string'
+    ? heroImage.startsWith('http')
+      ? heroImage
+      : withBase(heroImage.replace(/^\/+/, ''))
+    : null;
 ---
 
 <article class="blog-card">
   <a href={withBase(`blog/${post.id}/`)} class="card-link">
     {heroImage && (
       <div class="card-image">
-        <Image src={heroImage} alt={title} width={800} height={400} />
+        {typeof heroImage === 'string' ? (
+          <img src={heroImageSrc!} alt={title} loading="lazy" />
+        ) : (
+          <Image src={heroImage} alt={title} width={800} height={400} />
+        )}
       </div>
     )}
     <div class="card-content">

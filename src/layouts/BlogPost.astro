@@ -20,20 +20,27 @@ type Props = CollectionEntry<'blog'>['data'] & {
   nextPost?: CollectionEntry<'blog'> | null;
 };
 
-const { 
-  title, 
-  description, 
-  pubDate, 
-  updatedDate, 
-  heroImage, 
-  category, 
-  tags, 
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  category,
+  tags,
   headings = [],
   readingTime,
   wordCount,
   prevPost,
-  nextPost
+  nextPost,
 } = Astro.props;
+
+const heroImageSrc =
+  typeof heroImage === 'string'
+    ? heroImage.startsWith('http')
+      ? heroImage
+      : withBase(heroImage.replace(/^\/+/, ''))
+    : null;
 ---
 
 <html lang="zh-CN">
@@ -47,7 +54,11 @@ const {
       <article>
         {heroImage && (
           <div class="hero-image">
-            <Image width={1020} height={510} src={heroImage} alt={title} />
+            {typeof heroImage === 'string' ? (
+              <img src={heroImageSrc!} alt={title} loading="eager" />
+            ) : (
+              <Image width={1020} height={510} src={heroImage} alt={title} />
+            )}
           </div>
         )}
         <div class="post-container">
@@ -134,7 +145,7 @@ const {
 
             <Comments />
           </div>
-          
+
           <aside class="post-sidebar">
             <TableOfContents headings={headings} />
           </aside>
@@ -197,13 +208,15 @@ const {
     flex-wrap: wrap;
   }
 
-  .reading-time, .word-count {
+  .reading-time,
+  .word-count {
     display: flex;
     align-items: center;
     gap: 0.25rem;
   }
 
-  .reading-time svg, .word-count svg {
+  .reading-time svg,
+  .word-count svg {
     width: 14px;
     height: 14px;
   }
@@ -258,7 +271,8 @@ const {
     margin-bottom: 1.25rem;
   }
 
-  .prose :global(ul), .prose :global(ol) {
+  .prose :global(ul),
+  .prose :global(ol) {
     margin-bottom: 1.25rem;
     padding-left: 1.5rem;
   }
