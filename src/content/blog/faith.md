@@ -6,6 +6,8 @@ pubDate: 2026-04-14T12:04:44.449Z
 updatedDate: 2026-04-14T13:05:54.707Z
 heroImage: /images/pexels-vanessa-loring-5965656.jpg
 category: 随笔
+tags:
+  - 大三
 ---
 
 最近学习，想进军cv方向的导师做一段科研，可是从头学起的*~~transformer~~*似乎挺招人嫌……两个星期的学习似乎没有半点作用，
