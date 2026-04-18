@@ -58,7 +58,13 @@ const posts = allPosts
         <aside class="page-side-column">
           <div class="side-card">
             <h3>Current Tag</h3>
-            <p>节奏板</p>
+            <div class="beat-bars">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+            </div>
           </div>
         </aside>
       </section>
@@ -72,4 +78,19 @@ const posts = allPosts
   .breadcrumb a { color: var(--text-muted); }
   .page-desc { color: var(--text-muted); margin: 0; }
   .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .beat-bars { display: flex; align-items: flex-end; justify-content: center; gap: 6px; height: 80px; padding: 1rem 0; }
+  .bar {
+    width: 12px;
+    border-radius: 6px;
+    animation: beat 0.8s ease-in-out infinite;
+  }
+  .bar:nth-child(1) { height: 35%; background: linear-gradient(to top, #f97316, #fbbf24); animation-delay: 0s; }
+  .bar:nth-child(2) { height: 65%; background: linear-gradient(to top, #ec4899, #f472b6); animation-delay: 0.1s; }
+  .bar:nth-child(3) { height: 50%; background: linear-gradient(to top, #8b5cf6, #a78bfa); animation-delay: 0.2s; }
+  .bar:nth-child(4) { height: 80%; background: linear-gradient(to top, #06b6d4, #22d3ee); animation-delay: 0.3s; }
+  .bar:nth-child(5) { height: 45%; background: linear-gradient(to top, #10b981, #34d399); animation-delay: 0.4s; }
+  @keyframes beat {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
+  }
 </style>

@@ -14,7 +14,6 @@ const posts = (await getCollection('blog'))
   .slice(0, 6);
 
 const galleryItems = galleryData.images ?? [];
-const totalMoments = galleryItems.length + posts.length;
 const rotatingLines = [
   '慢慢发光，渐渐成长',
   '一切都活了，都有着无限的本领，要做什么，就做什么',
@@ -43,10 +42,6 @@ const rotatingLines = [
             <div class="stat-card">
               <strong>{galleryItems.length}</strong>
               <span>gallery frames</span>
-            </div>
-            <div class="stat-card">
-              <strong>{totalMoments}</strong>
-              <span>visible moments</span>
             </div>
           </div>
         </div>

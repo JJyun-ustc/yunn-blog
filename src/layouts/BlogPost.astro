@@ -1,4 +1,4 @@
----
+﻿---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
@@ -66,7 +66,15 @@ const heroImageSrc =
           <aside class="post-rail rail-left">
             <div class="side-card">
               <h3>Article Pulse</h3>
-              <p>正文仍然保持舒适宽度，但左右空间被接管为阅读氛围层。</p>
+              <div class="beat-bars-large">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
             </div>
             {tags && tags.length > 0 && (
               <div class="side-card">
@@ -115,7 +123,7 @@ const heroImageSrc =
               {description && <p class="post-description">{description}</p>}
               {updatedDate && (
                 <p class="updated-date">
-                  鏇存柊浜?<FormattedDate date={updatedDate} />
+                  更新于 <FormattedDate date={updatedDate} />
                 </p>
               )}
             </header>
@@ -127,7 +135,7 @@ const heroImageSrc =
             {tags && tags.length > 0 && (
               <footer class="post-footer card-surface">
                 <div class="post-tags">
-                  <span class="tags-label">鏍囩锛?/span>
+                  <span class="tags-label">标签：?/span>
                   {tags.map((tag: string) => (
                     <a href={withBase(`tags/${encodeURIComponent(tag)}/`)} class="tag">{tag}</a>
                   ))}
@@ -143,7 +151,7 @@ const heroImageSrc =
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="15 18 9 12 15 6"></polyline>
                       </svg>
-                      涓婁竴绡?
+                      一篇?
                     </span>
                     <span class="nav-title">{prevPost.data.title}</span>
                   </a>
@@ -151,7 +159,7 @@ const heroImageSrc =
                 {nextPost && (
                   <a href={withBase(`blog/${nextPost.id}/`)} class="nav-link nav-next">
                     <span class="nav-label">
-                      涓嬩竴绡?
+                      下一篇?
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="9 18 15 12 9 6"></polyline>
                       </svg>
@@ -428,4 +436,23 @@ const heroImageSrc =
       grid-template-columns: 1fr;
     }
   }
+
+  .beat-bars-large { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 120px; padding: 1rem 0; }
+  .beat-bars-large .bar {
+    width: 16px;
+    border-radius: 8px;
+    animation: beatLarge 0.8s ease-in-out infinite;
+  }
+  .beat-bars-large .bar:nth-child(1) { height: 40%; background: linear-gradient(to top, #f97316, #fbbf24); animation-delay: 0s; }
+  .beat-bars-large .bar:nth-child(2) { height: 70%; background: linear-gradient(to top, #ec4899, #f472b6); animation-delay: 0.1s; }
+  .beat-bars-large .bar:nth-child(3) { height: 55%; background: linear-gradient(to top, #8b5cf6, #a78bfa); animation-delay: 0.2s; }
+  .beat-bars-large .bar:nth-child(4) { height: 90%; background: linear-gradient(to top, #06b6d4, #22d3ee); animation-delay: 0.3s; }
+  .beat-bars-large .bar:nth-child(5) { height: 50%; background: linear-gradient(to top, #10b981, #34d399); animation-delay: 0.4s; }
+  .beat-bars-large .bar:nth-child(6) { height: 75%; background: linear-gradient(to top, #f59e0b, #fcd34d); animation-delay: 0.5s; }
+  .beat-bars-large .bar:nth-child(7) { height: 60%; background: linear-gradient(to top, #6366f1, #818cf8); animation-delay: 0.6s; }
+  @keyframes beatLarge {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
+  }
 </style>
+
