@@ -6,36 +6,36 @@ import { SITE_TITLE } from '../consts';
 
 const personalInfo = {
   name: 'Yunn',
-  bio: '学习，反思，留痕，向内生长。',
+  bio: '学习，反思，留痕，成长',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
   github: 'https://github.com/JJyun-ustc',
 };
 
 const skills = [
   { name: 'Python / C', color: '#5b8cff' },
-  { name: '控制理论', color: '#23f2ff' },
+  { name: 'control', color: '#23f2ff' },
   { name: 'MATLAB', color: '#ff5db1' },
   { name: 'Vision Transformer', color: '#a6ff47' },
-  { name: '写作与整理', color: '#ff8a1f' },
+  { name: 'robot', color: '#ff8a1f' },
 ];
 
 const timeline = [
   {
     year: '2023',
-    title: '中国科学技术大学相关学习阶段',
-    description: '持续积累训练、实验与阅读笔记。',
+    title: '中国科学技术大学10系',
+    description: '拷打中进步',
   },
   {
     year: '2026',
     title: '未知，待续',
-    description: '故事还没写完，页面会继续生长。',
+    description: '故事仍在继续',
   },
 ];
 
 const statusCards = [
-  { label: '近况', value: '实验 / 阅读 / 记录' },
-  { label: '偏好', value: '把混乱慢慢整理出纹理' },
-  { label: '节奏', value: '白天推导，夜里收束' },
+  { label: '近况', value: '学习/读文献 / 记录' },
+  { label: '偏好', value: '整齐，逻辑' },
+  { label: '节奏', value: '有点崩' },
 ];
 
 const skillStops = skills
@@ -80,7 +80,6 @@ const skillStops = skills
         <div class="page-main-column">
           <section class="about-section card-surface">
             <h2>关于博客</h2>
-            <p>这个博客更像一个长期展开的个人现场：有时记笔记，有时放图片，有时只是在页面上留下当天的心流痕迹。</p>
             <div class="status-grid">
               {statusCards.map((card) => (
                 <div class="status-card">
@@ -164,11 +163,11 @@ const skillStops = skills
 
         <aside class="page-side-column">
           <div class="side-card pulse-card">
-            <h3>当前信号</h3>
+            <h3>现况</h3>
             <div class="pulse-list">
-              <span>阅读密度上升</span>
-              <span>记录欲持续</span>
-              <span>页面仍在扩写</span>
+              <span>想发论文</span>
+              <span>记录持续</span>
+              <span>学习烦躁</span>
             </div>
           </div>
           <div class="side-card">

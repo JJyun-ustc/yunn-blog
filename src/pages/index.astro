@@ -16,9 +16,9 @@ const posts = (await getCollection('blog'))
 const galleryItems = galleryData.images ?? [];
 const totalMoments = galleryItems.length + posts.length;
 const rotatingLines = [
-  '慢慢收集，慢慢发亮。',
-  '把碎片整理成可停留的界面。',
-  '让留白也开始说话。',
+  '慢慢发光，渐渐成长',
+  '一切都活了，都有着无限的本领，要做什么，就做什么',
+  '相顾无言，唯有泪千行',
 ];
 ---
 
@@ -34,7 +34,7 @@ const rotatingLines = [
         <div class="hero-copy">
           <span class="eyebrow">personal signal</span>
           <h1 class="hero-title">Yunn 的 <span class="highlight">发呆网页</span></h1>
-          <p class="hero-desc">记录点滴，分享随笔，把原本空着的两侧也拉进叙事里。</p>
+          <p class="hero-desc">请输入文本 ： ）</p>
           <div class="stat-row">
             <div class="stat-card">
               <strong>{posts.length}</strong>
@@ -76,7 +76,6 @@ const rotatingLines = [
             <div class="section-heading-block section-header">
               <div>
                 <h2>最新文章</h2>
-                <p>首页不再只是一条中间走廊，而是能停留、扫读和漫游的整块画布。</p>
               </div>
               <a href={withBase('blog/')} class="view-all">查看全部 →</a>
             </div>
@@ -91,7 +90,6 @@ const rotatingLines = [
             <div class="section-heading-block section-header">
               <div>
                 <h2>my cherished picture</h2>
-                <p>图片区域继续保留，但节奏变得更开阔，能和文字一起呼吸。</p>
               </div>
             </div>
 
@@ -137,8 +135,7 @@ const rotatingLines = [
             <h3>页面状态</h3>
             <div class="pulse-list">
               <span>文章在更新</span>
-              <span>图像在补全</span>
-              <span>版式仍在生长</span>
+              <span>to be continued......</span>
             </div>
           </div>
         </aside>
