@@ -9,13 +9,14 @@ import { withBase } from '../../utils/paths';
 const posts = await getCollection('blog');
 const tags: Record<string, number> = {};
 
-posts.forEach(post => {
-  (post.data.tags || []).forEach(tag => {
+posts.forEach((post) => {
+  (post.data.tags || []).forEach((tag) => {
     tags[tag] = (tags[tag] || 0) + 1;
   });
 });
 
 const sortedTags = Object.entries(tags).sort((a, b) => b[1] - a[1]);
+const featuredTags = sortedTags.slice(0, 8);
 ---
 
 <!doctype html>
@@ -25,43 +26,55 @@ const sortedTags = Object.entries(tags).sort((a, b) => b[1] - a[1]);
   </head>
   <body>
     <Header />
-    <main>
-      <h1>标签</h1>
-      <p class="page-desc">共 {sortedTags.length} 个标签</p>
-      <div class="tags-cloud">
-        {sortedTags.map(([tag, count]) => (
-          <a href={withBase(`tags/${encodeURIComponent(tag)}/`)} class="tag-item">
-            <span class="tag-name">{tag}</span>
-            <span class="tag-count">{count}</span>
-          </a>
-        ))}
-      </div>
+    <main class="shell">
+      <section class="page-hero">
+        <span class="eyebrow">tag atlas</span>
+        <h1>标签</h1>
+        <p class="page-desc">共 {sortedTags.length} 个标签</p>
+      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <div class="card-surface">
+            <div class="section-heading-block">
+              <div>
+                <h2>Cloud</h2>
+                <p>标签被放进更松散的云层里，横向空间开始真正工作。</p>
+              </div>
+            </div>
+            <div class="tags-cloud">
+              {sortedTags.map(([tag, count]) => (
+                <a href={withBase(`tags/${encodeURIComponent(tag)}/`)} class="tag-item">
+                  <span class="tag-name">{tag}</span>
+                  <span class="tag-count">{count}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Top Tags</h3>
+            <div class="pill-list">
+              {featuredTags.map(([tag]) => (
+                <span>#{tag}</span>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-
-  .page-desc {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .tags-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
+  .page-desc { color: var(--text-muted); margin-bottom: 0; }
+  .tags-cloud { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.5rem; }
   .tag-item {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.7rem 1.05rem;
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 9999px;
@@ -69,23 +82,9 @@ const sortedTags = Object.entries(tags).sort((a, b) => b[1] - a[1]);
     color: var(--text);
     font-size: 0.9rem;
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 10px 24px var(--shadow);
   }
-
-  .tag-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow);
-    border-color: var(--primary);
-  }
-
-  .tag-name {
-    font-weight: 500;
-  }
-
-  .tag-count {
-    font-size: 0.75rem;
-    color: var(--primary);
-    background: var(--gradient-start);
-    padding: 0.1rem 0.4rem;
-    border-radius: 9999px;
-  }
+  .tag-item:hover { transform: translateY(-2px); box-shadow: 0 16px 28px var(--shadow-strong); border-color: var(--primary); }
+  .tag-name { font-weight: 500; }
+  .tag-count { font-size: 0.75rem; color: var(--primary); background: var(--gradient-start); padding: 0.1rem 0.4rem; border-radius: 9999px; }
 </style>

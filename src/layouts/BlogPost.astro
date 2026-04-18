@@ -50,20 +50,38 @@ const heroImageSrc =
   <body>
     <ReadingProgress />
     <Header />
-    <main class="post-main">
-      <article>
+    <main class="post-main shell">
+      <article class="post-shell">
         {heroImage && (
           <div class="hero-image">
             {typeof heroImage === 'string' ? (
               <img src={heroImageSrc!} alt={title} loading="eager" />
             ) : (
-              <Image width={1020} height={510} src={heroImage} alt={title} />
+              <Image width={1400} height={620} src={heroImage} alt={title} />
             )}
           </div>
         )}
-        <div class="post-container">
+
+        <div class="post-layout">
+          <aside class="post-rail rail-left">
+            <div class="side-card">
+              <h3>Article Pulse</h3>
+              <p>正文仍然保持舒适宽度，但左右空间被接管为阅读氛围层。</p>
+            </div>
+            {tags && tags.length > 0 && (
+              <div class="side-card">
+                <h3>Tags</h3>
+                <div class="pill-list">
+                  {tags.map((tag: string) => (
+                    <a href={withBase(`tags/${encodeURIComponent(tag)}/`)}>{tag}</a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </aside>
+
           <div class="post-content">
-            <header class="post-header">
+            <header class="post-header page-hero">
               <div class="post-meta">
                 {category && (
                   <a href={withBase(`categories/${encodeURIComponent(category)}/`)} class="category-link">
@@ -94,21 +112,22 @@ const heroImageSrc =
                 )}
               </div>
               <h1>{title}</h1>
+              {description && <p class="post-description">{description}</p>}
               {updatedDate && (
                 <p class="updated-date">
-                  更新于 <FormattedDate date={updatedDate} />
+                  鏇存柊浜?<FormattedDate date={updatedDate} />
                 </p>
               )}
             </header>
 
-            <div class="prose">
+            <div class="prose card-surface">
               <slot />
             </div>
 
             {tags && tags.length > 0 && (
-              <footer class="post-footer">
+              <footer class="post-footer card-surface">
                 <div class="post-tags">
-                  <span class="tags-label">标签：</span>
+                  <span class="tags-label">鏍囩锛?/span>
                   {tags.map((tag: string) => (
                     <a href={withBase(`tags/${encodeURIComponent(tag)}/`)} class="tag">{tag}</a>
                   ))}
@@ -124,7 +143,7 @@ const heroImageSrc =
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="15 18 9 12 15 6"></polyline>
                       </svg>
-                      上一篇
+                      涓婁竴绡?
                     </span>
                     <span class="nav-title">{prevPost.data.title}</span>
                   </a>
@@ -132,7 +151,7 @@ const heroImageSrc =
                 {nextPost && (
                   <a href={withBase(`blog/${nextPost.id}/`)} class="nav-link nav-next">
                     <span class="nav-label">
-                      下一篇
+                      涓嬩竴绡?
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="9 18 15 12 9 6"></polyline>
                       </svg>
@@ -146,8 +165,10 @@ const heroImageSrc =
             <Comments />
           </div>
 
-          <aside class="post-sidebar">
-            <TableOfContents headings={headings} />
+          <aside class="post-rail rail-right">
+            <div class="post-sidebar">
+              <TableOfContents headings={headings} />
+            </div>
           </aside>
         </div>
       </article>
@@ -160,15 +181,22 @@ const heroImageSrc =
 
 <style>
   .post-main {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
+    max-width: var(--site-max);
+    padding-top: 0;
+  }
+
+  .post-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .hero-image {
     width: 100%;
-    max-height: 400px;
+    max-height: 460px;
     overflow: hidden;
+    border-radius: 0 0 28px 28px;
+    box-shadow: 0 20px 40px var(--shadow);
   }
 
   .hero-image img {
@@ -178,22 +206,30 @@ const heroImageSrc =
     border-radius: 0;
   }
 
-  .post-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+  .post-layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 2rem;
+    grid-template-columns: minmax(220px, 0.55fr) minmax(0, var(--content-max)) minmax(240px, 0.62fr);
+    justify-content: center;
+    gap: 1.25rem;
     align-items: start;
   }
 
+  .post-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 5.75rem;
+  }
+
   .post-content {
-    max-width: 720px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .post-header {
-    margin-bottom: 2rem;
     text-align: center;
   }
 
@@ -215,44 +251,37 @@ const heroImageSrc =
     gap: 0.25rem;
   }
 
-  .reading-time svg,
-  .word-count svg {
-    width: 14px;
-    height: 14px;
-  }
-
   .category-link {
     display: inline-block;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    text-decoration: none;
+    padding: 0.28rem 0.78rem;
+    border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 500;
-    transition: transform 0.2s;
-  }
-
-  .category-link:hover {
-    transform: scale(1.05);
   }
 
   .post-header h1 {
-    font-size: 2rem;
-    margin: 0 0 0.5rem;
-    line-height: 1.3;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0 0 0.75rem;
+    line-height: 1.2;
+  }
+
+  .post-description {
+    margin: 0 auto 0.75rem;
+    max-width: 40rem;
+    color: var(--text-secondary);
   }
 
   .updated-date {
     font-size: 0.875rem;
     color: var(--text-muted);
-    font-style: italic;
     margin: 0;
   }
 
   .prose {
     color: var(--text);
-    line-height: 1.8;
+    line-height: 1.85;
   }
 
   .prose :global(h2) {
@@ -284,28 +313,22 @@ const heroImageSrc =
   .prose :global(blockquote) {
     margin: 1.5rem 0;
     padding: 1rem 1.5rem;
-    background: var(--bg-secondary);
+    background: rgba(255, 255, 255, 0.34);
     border-left: 4px solid var(--primary);
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 14px 14px 0;
   }
 
   .prose :global(pre) {
     margin: 1.5rem 0;
     padding: 1rem;
     background: var(--bg-secondary);
-    border-radius: 8px;
+    border-radius: 14px;
     overflow-x: auto;
   }
 
   .prose :global(img) {
     margin: 1.5rem 0;
-    border-radius: 8px;
-  }
-
-  .post-footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
+    border-radius: 16px;
   }
 
   .post-tags {
@@ -320,26 +343,7 @@ const heroImageSrc =
     font-size: 0.9rem;
   }
 
-  .tag {
-    display: inline-block;
-    padding: 0.3rem 0.75rem;
-    background: var(--gradient-start);
-    color: var(--primary);
-    border-radius: 9999px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: background-color 0.2s, color 0.2s;
-  }
-
-  .tag:hover {
-    background: var(--primary);
-    color: white;
-  }
-
   .post-navigation {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -349,17 +353,18 @@ const heroImageSrc =
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 1.1rem;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 22px;
     text-decoration: none;
     transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 12px 24px var(--shadow);
   }
 
   .nav-link:hover {
     border-color: var(--primary);
-    box-shadow: 0 4px 12px var(--shadow);
+    box-shadow: 0 18px 28px var(--shadow-strong);
     transform: translateY(-2px);
   }
 
@@ -389,40 +394,38 @@ const heroImageSrc =
     line-height: 1.4;
   }
 
-  .nav-link:hover .nav-title {
-    color: var(--primary);
+  .post-sidebar {
+    position: sticky;
+    top: 0;
+  }
+
+  @media (max-width: 1200px) {
+    .post-layout {
+      grid-template-columns: minmax(0, var(--content-max)) minmax(250px, 0.7fr);
+    }
+
+    .rail-left {
+      display: none;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .post-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .post-rail {
+      position: static;
+    }
+
+    .rail-right {
+      order: 3;
+    }
   }
 
   @media (max-width: 640px) {
     .post-navigation {
       grid-template-columns: 1fr;
-    }
-  }
-
-  .post-sidebar {
-    position: sticky;
-    top: 100px;
-    height: fit-content;
-  }
-
-  @media (max-width: 1200px) {
-    .post-container {
-      grid-template-columns: 1fr;
-    }
-
-    .post-sidebar {
-      display: none;
-    }
-
-    .post-content {
-      max-width: 720px;
-      margin: 0 auto;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .post-header h1 {
-      font-size: 1.5rem;
     }
   }
 </style>

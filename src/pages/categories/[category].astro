@@ -12,8 +12,7 @@ export async function getStaticPaths() {
   const categories = new Set<string>();
 
   posts.forEach((post) => {
-    const category = post.data.category || '随笔';
-    categories.add(category);
+    categories.add(post.data.category || '随笔');
   });
 
   return Array.from(categories).map((category) => ({
@@ -36,58 +35,41 @@ const posts = allPosts
   </head>
   <body>
     <Header />
-    <main>
-      <nav class="breadcrumb">
-        <a href={withBase('categories/')}>分类</a>
-        <span>/</span>
-        <span>{category}</span>
-      </nav>
-      <h1>{category}</h1>
-      <p class="page-desc">共 {posts.length} 篇文章</p>
-      <div class="posts-grid">
-        {posts.map((post) => (
-          <BlogCard post={post} />
-        ))}
-      </div>
+    <main class="shell">
+      <section class="page-hero">
+        <nav class="breadcrumb">
+          <a href={withBase('categories/')}>分类</a>
+          <span>/</span>
+          <span>{category}</span>
+        </nav>
+        <h1>{category}</h1>
+        <p class="page-desc">共 {posts.length} 篇文章</p>
+      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <div class="card-surface">
+            <div class="posts-grid">
+              {posts.map((post) => (
+                <BlogCard post={post} />
+              ))}
+            </div>
+          </div>
+        </div>
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Category View</h3>
+            <p>分类详情页沿用大画布结构，让集合关系在视觉上更清楚。</p>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  .breadcrumb {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-  }
-
-  .breadcrumb a {
-    color: var(--text-muted);
-    text-decoration: none;
-  }
-
-  .breadcrumb a:hover {
-    color: var(--primary);
-  }
-
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-
-  .page-desc {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  @media (max-width: 768px) {
-    .posts-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  .breadcrumb { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; }
+  .breadcrumb a { color: var(--text-muted); }
+  .page-desc { color: var(--text-muted); margin: 0; }
+  .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
 </style>

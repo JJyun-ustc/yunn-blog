@@ -9,7 +9,7 @@ import { withBase } from '../../utils/paths';
 const posts = await getCollection('blog');
 const categories: Record<string, number> = {};
 
-posts.forEach(post => {
+posts.forEach((post) => {
   const cat = post.data.category || '随笔';
   categories[cat] = (categories[cat] || 0) + 1;
 });
@@ -24,38 +24,46 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
   </head>
   <body>
     <Header />
-    <main>
-      <h1>分类</h1>
-      <p class="page-desc">共 {sortedCategories.length} 个分类</p>
-      <div class="categories-grid">
-        {sortedCategories.map(([category, count]) => (
-          <a href={withBase(`categories/${encodeURIComponent(category)}/`)} class="category-card">
-            <span class="category-name">{category}</span>
-            <span class="category-count">{count} 篇</span>
-          </a>
-        ))}
-      </div>
+    <main class="shell">
+      <section class="page-hero">
+        <span class="eyebrow">category deck</span>
+        <h1>分类</h1>
+        <p class="page-desc">共 {sortedCategories.length} 个分类</p>
+      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <div class="card-surface">
+            <div class="section-heading-block">
+              <div>
+                <h2>Collections</h2>
+                <p>分类页从单列信息墙，变成可横向扫读的卡片台面。</p>
+              </div>
+            </div>
+            <div class="categories-grid">
+              {sortedCategories.map(([category, count]) => (
+                <a href={withBase(`categories/${encodeURIComponent(category)}/`)} class="category-card">
+                  <span class="category-name">{category}</span>
+                  <span class="category-count">{count} 篇</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Mode</h3>
+            <p>每个分类像一张抽屉卡，分类本身就是导航层。</p>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-
-  .page-desc {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-
+  .page-desc { color: var(--text-muted); margin-bottom: 0; }
+  .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
   .category-card {
     display: flex;
     justify-content: space-between;
@@ -63,27 +71,13 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
     padding: 1.25rem;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 20px;
     text-decoration: none;
     color: var(--text);
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 10px 24px var(--shadow);
   }
-
-  .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px var(--shadow);
-    border-color: var(--primary);
-  }
-
-  .category-name {
-    font-weight: 600;
-  }
-
-  .category-count {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    background: var(--gradient-start);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-  }
+  .category-card:hover { transform: translateY(-2px); box-shadow: 0 16px 28px var(--shadow-strong); border-color: var(--primary); }
+  .category-name { font-weight: 600; }
+  .category-count { font-size: 0.875rem; color: var(--text-muted); background: var(--gradient-start); padding: 0.25rem 0.75rem; border-radius: 9999px; }
 </style>

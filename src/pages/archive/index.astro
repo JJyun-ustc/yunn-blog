@@ -8,16 +8,13 @@ import { SITE_TITLE } from '../../consts';
 import { withBase } from '../../utils/paths';
 
 const posts = (await getCollection('blog'))
-  .filter(post => !post.data.draft)
+  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// 按年份分组
 const postsByYear: Record<number, typeof posts> = {};
-posts.forEach(post => {
+posts.forEach((post) => {
   const year = post.data.pubDate.getFullYear();
-  if (!postsByYear[year]) {
-    postsByYear[year] = [];
-  }
+  if (!postsByYear[year]) postsByYear[year] = [];
   postsByYear[year].push(post);
 });
 
@@ -31,95 +28,64 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
   </head>
   <body>
     <Header />
-    <main>
-      <h1>归档</h1>
-      <p class="page-desc">共 {posts.length} 篇文章</p>
-      <div class="archive-list">
-        {years.map(year => (
-          <section class="year-section">
-            <h2 class="year-title">{year}</h2>
-            <div class="year-posts">
-              {postsByYear[year].map(post => (
-                <a href={withBase(`blog/${post.id}/`)} class="archive-item">
-                  <span class="archive-date">
-                    <FormattedDate date={post.data.pubDate} />
-                  </span>
-                  <span class="archive-title">{post.data.title}</span>
-                </a>
+    <main class="shell">
+      <section class="page-hero">
+        <span class="eyebrow">time shelf</span>
+        <h1>归档</h1>
+        <p class="page-desc">共 {posts.length} 篇文章</p>
+      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <div class="archive-list card-surface">
+            {years.map((year) => (
+              <section class="year-section">
+                <h2 class="year-title">{year}</h2>
+                <div class="year-posts">
+                  {postsByYear[year].map((post) => (
+                    <a href={withBase(`blog/${post.id}/`)} class="archive-item">
+                      <span class="archive-date"><FormattedDate date={post.data.pubDate} /></span>
+                      <span class="archive-title">{post.data.title}</span>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Years</h3>
+            <div class="pill-list">
+              {years.map((year) => (
+                <span>{year}</span>
               ))}
             </div>
-          </section>
-        ))}
-      </div>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-
-  .page-desc {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .archive-list {
-    max-width: 700px;
-  }
-
-  .year-section {
-    margin-bottom: 2rem;
-  }
-
-  .year-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border);
-    color: var(--primary);
-  }
-
-  .year-posts {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
+  .page-desc { color: var(--text-muted); margin: 0; }
+  .year-section + .year-section { margin-top: 2rem; }
+  .year-title { font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); color: var(--primary); }
+  .year-posts { display: flex; flex-direction: column; gap: 0.7rem; }
   .archive-item {
     display: flex;
     gap: 1rem;
-    padding: 0.75rem 1rem;
-    background: var(--card-bg);
+    padding: 0.95rem 1rem;
+    background: rgba(255, 255, 255, 0.34);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 18px;
     text-decoration: none;
     color: var(--text);
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   }
-
-  .archive-item:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px var(--shadow);
-    border-color: var(--primary);
-  }
-
-  .archive-date {
-    flex-shrink: 0;
-    color: var(--text-muted);
-    font-size: 0.875rem;
-  }
-
-  .archive-title {
-    font-weight: 500;
-  }
-
-  @media (max-width: 640px) {
-    .archive-item {
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-  }
+  .archive-item:hover { transform: translateX(4px); box-shadow: 0 10px 22px var(--shadow); border-color: var(--primary); }
+  .archive-date { flex-shrink: 0; color: var(--text-muted); font-size: 0.875rem; }
+  .archive-title { font-weight: 500; }
+  @media (max-width: 640px) { .archive-item { flex-direction: column; gap: 0.25rem; } }
 </style>

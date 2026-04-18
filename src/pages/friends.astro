@@ -9,9 +9,9 @@ import { withBase } from '../utils/paths';
 
 const siteInfo = {
   name: 'YUNN-BLOG',
-  author: '芠芸',
+  author: 'Yunn',
   url: 'https://jjyun-ustc.github.io/yunn-blog/',
-  description: '直面生活的痛击',
+  description: '记录生活切面与片段灵光',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
 };
 
@@ -21,74 +21,86 @@ const approvedLinks = friendLinks.approved ?? [];
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <BaseHead title={`相关链接 - ${SITE_TITLE}`} description="相关链接推引" />
+    <BaseHead title={`友情链接 - ${SITE_TITLE}`} description="友情链接索引" />
   </head>
   <body>
     <Header />
-    <main>
-      <div class="page-header">
-        <h1>相关链接</h1>
-        <p class="page-desc">相关链接推引</p>
-      </div>
+    <main class="shell">
+      <section class="page-hero">
+        <span class="eyebrow">friend map</span>
+        <h1>友情链接</h1>
+        <p class="page-desc">相关站点与来往痕迹</p>
+      </section>
 
-      <section class="my-info">
-        <h2>本站信息</h2>
-        <div class="info-card">
-          <div class="info-avatar">
-            <img src={siteInfo.avatar} alt={siteInfo.name} />
-          </div>
-          <div class="info-content">
-            <h3>{siteInfo.name}</h3>
-            <p class="info-author">博主：{siteInfo.author}</p>
-            <p class="info-desc">{siteInfo.description}</p>
-            <div class="info-url">
-              <span>网址：</span>
-              <a href={siteInfo.url} target="_blank" rel="noopener noreferrer">{siteInfo.url}</a>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <section class="my-info card-surface">
+            <h2>本站信息</h2>
+            <div class="info-card">
+              <div class="info-avatar">
+                <img src={siteInfo.avatar} alt={siteInfo.name} />
+              </div>
+              <div class="info-content">
+                <h3>{siteInfo.name}</h3>
+                <p class="info-author">博主：{siteInfo.author}</p>
+                <p class="info-desc">{siteInfo.description}</p>
+                <div class="info-url">
+                  <span>网址：</span>
+                  <a href={siteInfo.url} target="_blank" rel="noopener noreferrer">{siteInfo.url}</a>
+                </div>
+              </div>
             </div>
+          </section>
+
+          <section class="friends-section card-surface">
+            <div class="section-heading">
+              <h2>友情链接展示</h2>
+              <a href={withBase('admin/')} target="_blank" rel="noreferrer">后台处理展示</a>
+            </div>
+
+            {approvedLinks.length > 0 ? (
+              <div class="friends-grid">
+                {approvedLinks.map((friend) => (
+                  <a href={friend.url} target="_blank" rel="noopener noreferrer" class="friend-card">
+                    <div class="friend-avatar">
+                      <img src={withBase(friend.avatar)} alt={friend.name} loading="lazy" />
+                    </div>
+                    <div class="friend-content">
+                      <h3>{friend.name}</h3>
+                      <p>{friend.description}</p>
+                    </div>
+                    <div class="friend-link-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p class="no-friends">当前还没有公开展示的友情链接，欢迎在下方留言申请。</p>
+            )}
+          </section>
+
+          <section class="apply-section card-surface">
+            <h2>申请展示</h2>
+            <div class="apply-content">
+              <p class="apply-note">
+                <strong>注意事项：</strong>请在下方留言中留下站点名称、链接、简介和头像地址；我会自行处理，并在审核后选择是否展示在上方区域。
+              </p>
+            </div>
+            <Comments />
+          </section>
+        </div>
+
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Link Notes</h3>
+            <p>这一页把原先两边的空场改造成邻站说明栏，让友情链接有更完整的舞台。</p>
           </div>
-        </div>
-      </section>
-
-      <section class="friends-section">
-        <div class="section-heading">
-          <h2>相关链接展示</h2>
-          <a href={withBase('admin/')} target="_blank" rel="noreferrer">后台处理展示</a>
-        </div>
-
-        {approvedLinks.length > 0 ? (
-          <div class="friends-grid">
-            {approvedLinks.map((friend) => (
-              <a href={friend.url} target="_blank" rel="noopener noreferrer" class="friend-card">
-                <div class="friend-avatar">
-                  <img src={withBase(friend.avatar)} alt={friend.name} loading="lazy" />
-                </div>
-                <div class="friend-content">
-                  <h3>{friend.name}</h3>
-                  <p>{friend.description}</p>
-                </div>
-                <div class="friend-link-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                  </svg>
-                </div>
-              </a>
-            ))}
-          </div>
-        ) : (
-          <p class="no-friends">当前还没有公开展示的相关链接，欢迎在下方留言申请。</p>
-        )}
-      </section>
-
-      <section class="apply-section">
-        <h2>申请展示</h2>
-        <div class="apply-content">
-          <p class="apply-note">
-            <strong>注意事项：</strong>请在下方留言中留下站点名称、链接、简介和头像地址；我会自行处理，并在审核后选择是否展示在上方区域。
-          </p>
-        </div>
-        <Comments />
+        </aside>
       </section>
     </main>
     <Footer />
@@ -96,15 +108,6 @@ const approvedLinks = friendLinks.approved ?? [];
 </html>
 
 <style>
-  .page-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .page-header h1 {
-    margin: 0 0 0.5rem;
-  }
-
   .page-desc {
     color: var(--text-muted);
     margin: 0;
@@ -113,14 +116,9 @@ const approvedLinks = friendLinks.approved ?? [];
   .my-info,
   .friends-section,
   .apply-section {
-    margin-bottom: 3rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .section-heading {
@@ -128,82 +126,52 @@ const approvedLinks = friendLinks.approved ?? [];
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
   }
 
   .section-heading h2 {
     margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
-  .section-heading a {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.95rem;
   }
 
   .info-card {
     display: flex;
     gap: 1.5rem;
     padding: 1.5rem;
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.28);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: box-shadow 0.2s;
-  }
-
-  .info-card:hover {
-    box-shadow: 0 8px 16px var(--shadow);
+    border-radius: 20px;
   }
 
   .info-avatar {
     flex-shrink: 0;
-    width: 80px;
-    height: 80px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     overflow: hidden;
     background: var(--gradient-start);
   }
 
-  .info-avatar img {
+  .info-avatar img,
+  .friend-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .info-content {
-    flex: 1;
+  .info-content h3,
+  .friend-content h3 {
+    margin: 0 0 0.4rem;
   }
 
-  .info-content h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.25rem;
-  }
-
-  .info-author {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin: 0 0 0.5rem;
-  }
-
-  .info-desc {
-    margin: 0 0 0.75rem;
+  .info-author,
+  .info-desc,
+  .info-url,
+  .friend-content p {
     color: var(--text-secondary);
-  }
-
-  .info-url {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .info-url a {
-    color: var(--primary);
   }
 
   .friends-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
   }
 
@@ -211,9 +179,9 @@ const approvedLinks = friendLinks.approved ?? [];
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.28);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 20px;
     text-decoration: none;
     color: var(--text);
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
@@ -222,7 +190,7 @@ const approvedLinks = friendLinks.approved ?? [];
 
   .friend-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px var(--shadow);
+    box-shadow: 0 14px 28px var(--shadow);
     border-color: var(--primary);
   }
 
@@ -235,64 +203,41 @@ const approvedLinks = friendLinks.approved ?? [];
     background: var(--gradient-start);
   }
 
-  .friend-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
   .friend-content {
     flex: 1;
     min-width: 0;
   }
 
-  .friend-content h3 {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
-    color: var(--text);
-  }
-
   .friend-content p {
     margin: 0;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 0.9rem;
   }
 
   .friend-link-icon {
     flex-shrink: 0;
     color: var(--text-muted);
-    transition: color 0.2s;
-  }
-
-  .friend-card:hover .friend-link-icon {
-    color: var(--primary);
   }
 
   .no-friends {
     text-align: center;
     padding: 3rem 1rem;
     color: var(--text-muted);
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.22);
     border: 1px dashed var(--border);
-    border-radius: 12px;
+    border-radius: 20px;
   }
 
   .apply-content {
-    padding: 1.5rem;
-    background: var(--card-bg);
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.28);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+    border-radius: 20px;
   }
 
   .apply-note {
     padding: 1rem;
     background: var(--gradient-start);
-    border-radius: 8px;
+    border-radius: 14px;
     margin: 0;
     color: var(--text);
   }
@@ -307,10 +252,6 @@ const approvedLinks = friendLinks.approved ?? [];
     .section-heading {
       flex-direction: column;
       align-items: flex-start;
-    }
-
-    .friends-grid {
-      grid-template-columns: 1fr;
     }
   }
 </style>

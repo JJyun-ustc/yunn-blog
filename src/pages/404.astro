@@ -13,12 +13,12 @@ import { withBase } from '../utils/paths';
   </head>
   <body>
     <Header />
-    <main>
-      <div class="error-page">
+    <main class="shell">
+      <div class="error-page page-hero">
         <div class="error-code">404</div>
         <h1>页面走丢了</h1>
         <p class="error-message">
-          抱歉，你访问的页面不存在或已被移除。
+          抱歉，你访问的页面不存在或已经被移动。
         </p>
         <div class="error-actions">
           <a href={withBase()} class="btn-primary">
@@ -53,8 +53,7 @@ import { withBase } from '../utils/paths';
 <style>
   .error-page {
     text-align: center;
-    padding: 4rem 1rem;
-    min-height: 60vh;
+    min-height: 68vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -62,7 +61,7 @@ import { withBase } from '../utils/paths';
   }
 
   .error-code {
-    font-size: 8rem;
+    font-size: clamp(5rem, 14vw, 9rem);
     font-weight: 700;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
@@ -78,27 +77,21 @@ import { withBase } from '../utils/paths';
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-14px);
     }
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin: 0 0 1rem;
-    color: var(--text);
   }
 
   .error-message {
     color: var(--text-secondary);
     font-size: 1.1rem;
     margin: 0 0 2rem;
-    max-width: 500px;
+    max-width: 36rem;
   }
 
   .error-actions {
     display: flex;
     gap: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -107,8 +100,8 @@ import { withBase } from '../utils/paths';
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.875rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
     font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
@@ -122,27 +115,21 @@ import { withBase } from '../utils/paths';
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 16px rgba(234, 88, 12, 0.3);
   }
 
   .btn-secondary {
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.38);
     color: var(--text);
     border: 1px solid var(--border);
   }
 
-  .btn-secondary:hover {
-    border-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow);
-  }
-
   .error-suggestions {
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.28);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 22px;
     padding: 1.5rem 2rem;
-    max-width: 500px;
+    max-width: 520px;
     text-align: left;
   }
 
@@ -156,34 +143,5 @@ import { withBase } from '../utils/paths';
     margin: 0;
     padding-left: 1.5rem;
     color: var(--text-secondary);
-  }
-
-  .error-suggestions li {
-    margin-bottom: 0.5rem;
-  }
-
-  @media (max-width: 768px) {
-    .error-code {
-      font-size: 5rem;
-    }
-
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    .error-message {
-      font-size: 1rem;
-    }
-
-    .error-actions {
-      flex-direction: column;
-      width: 100%;
-      max-width: 300px;
-    }
-
-    .btn-primary, .btn-secondary {
-      width: 100%;
-      justify-content: center;
-    }
   }
 </style>

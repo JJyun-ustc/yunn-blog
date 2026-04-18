@@ -14,6 +14,7 @@ const posts = (await getCollection('blog'))
   .slice(0, 6);
 
 const galleryItems = galleryData.images ?? [];
+const totalMoments = galleryItems.length + posts.length;
 ---
 
 <!doctype html>
@@ -23,51 +24,114 @@ const galleryItems = galleryData.images ?? [];
   </head>
   <body>
     <Header />
-    <main>
-      <section class="hero">
-        <h1 class="hero-title">芠芸的<span class="highlight">发癫网页</span></h1>
-        <p class="hero-desc">记录点滴，分享随笔</p>
+    <main class="shell home-shell">
+      <section class="page-hero hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">personal signal</span>
+          <h1 class="hero-title">Yunn 的 <span class="highlight">发呆网页</span></h1>
+          <p class="hero-desc">记录点滴，分享随笔，把原本空着的两侧也变成页面的一部分。</p>
+          <div class="stat-row">
+            <div class="stat-card">
+              <strong>{posts.length}</strong>
+              <span>recent notes</span>
+            </div>
+            <div class="stat-card">
+              <strong>{galleryItems.length}</strong>
+              <span>gallery frames</span>
+            </div>
+            <div class="stat-card">
+              <strong>{totalMoments}</strong>
+              <span>visible moments</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-stage">
+          <div class="floating-card intro-card">
+            <span>Notebook</span>
+            <strong>Words, traces, sparks.</strong>
+          </div>
+          <div class="floating-card orbit-card">
+            <span>Current Mood</span>
+            <strong>Warm / Restless / Recording</strong>
+          </div>
+          <div class="mosaic">
+            <div class="wide warm"></div>
+            <div class="cool"></div>
+            <div class="tall ember"></div>
+            <div class="cool"></div>
+            <div class="wide paper"></div>
+            <div class="warm"></div>
+          </div>
+        </div>
       </section>
 
-      <section class="recent-posts">
-        <div class="section-header">
-          <h2>最新文章</h2>
-          <a href={withBase('blog/')} class="view-all">查看全部 →</a>
-        </div>
-        <div class="posts-grid">
-          {posts.map((post) => (
-            <BlogCard post={post} />
-          ))}
-        </div>
-      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <section class="recent-posts card-surface">
+            <div class="section-heading-block section-header">
+              <div>
+                <h2>最新文章</h2>
+                <p>保留原有内容，同时让首页拥有更宽阔的浏览节奏。</p>
+              </div>
+              <a href={withBase('blog/')} class="view-all">查看全部 →</a>
+            </div>
+            <div class="posts-grid">
+              {posts.map((post) => (
+                <BlogCard post={post} />
+              ))}
+            </div>
+          </section>
 
-      <section class="gallery-section">
-        <div class="section-header">
-          <div>
-            <h2>my cherished picture</h2>
-          </div>
+          <section class="gallery-section card-surface">
+            <div class="section-heading-block section-header">
+              <div>
+                <h2>my cherished picture</h2>
+                <p>图片区保留原有展示，同时承担首页下半场的视觉换气。</p>
+              </div>
+            </div>
+
+            {galleryItems.length > 0 ? (
+              <div class="gallery-grid">
+                {galleryItems.map((item) => (
+                  <figure class="gallery-card">
+                    <img src={withBase(item.image)} alt={item.alt} loading="lazy" />
+                    {(item.title || item.description) && (
+                      <figcaption>
+                        {item.title && <strong>{item.title}</strong>}
+                        {item.description && <p>{item.description}</p>}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            ) : (
+              <div class="gallery-empty">
+                <p>这里已经预留好了图片区。</p>
+                <p>把图片放到 `public/images/homepage/`，再编辑 `src/data/homepage-gallery.json` 就能展示。</p>
+              </div>
+            )}
+          </section>
         </div>
 
-        {galleryItems.length > 0 ? (
-          <div class="gallery-grid">
-            {galleryItems.map((item) => (
-              <figure class="gallery-card">
-                <img src={withBase(item.image)} alt={item.alt} loading="lazy" />
-                {(item.title || item.description) && (
-                  <figcaption>
-                    {item.title && <strong>{item.title}</strong>}
-                    {item.description && <p>{item.description}</p>}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Scene Notes</h3>
+            <p>两侧空白不再只是背景，而是陪衬正文与图片的场景层。</p>
           </div>
-        ) : (
-          <div class="gallery-empty">
-            <p>这里已经预留好了图片展示区。</p>
-            <p>把图片放到 `public/images/homepage/`，再编辑 `src/data/homepage-gallery.json` 就能展示。</p>
+          <div class="side-card">
+            <h3>Browse By</h3>
+            <div class="pill-list">
+              <a href={withBase('blog/')}>Blog</a>
+              <a href={withBase('archive/')}>Archive</a>
+              <a href={withBase('tags/')}>Tags</a>
+              <a href={withBase('friends/')}>Friends</a>
+            </div>
           </div>
-        )}
+          <div class="side-card quote-card">
+            <h3>Ambient Line</h3>
+            <p>“把页面当作房间来布置，而不是把文字钉在一条细长的墙上。”</p>
+          </div>
+        </aside>
       </section>
     </main>
     <Footer />
@@ -75,131 +139,102 @@ const galleryItems = galleryData.images ?? [];
 </html>
 
 <style>
-  .hero {
-    text-align: center;
-    padding: 4rem 0 3rem;
+  .home-shell { gap: 1.75rem; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.9fr);
+    gap: clamp(1.25rem, 2vw, 2rem);
+    align-items: center;
+    padding: clamp(1.75rem, 3vw, 3rem);
   }
-
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 1;
+  }
   .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.25rem);
-    margin-bottom: 1rem;
-    line-height: 1.1;
+    font-size: clamp(2.8rem, 7vw, 5.8rem);
+    margin: 0;
+    line-height: 0.98;
     letter-spacing: 0.04em;
   }
-
   .highlight {
     display: inline-block;
     margin-left: 0.2em;
-    background: linear-gradient(135deg, #e8572a, #ffb703);
+    background: linear-gradient(135deg, var(--primary), #f59e0b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-
   .hero-desc {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: var(--text-secondary);
     margin: 0;
+    max-width: 40rem;
   }
-
-  .recent-posts,
-  .gallery-section {
-    margin: 3rem 0;
-  }
-
-  .section-header {
+  .hero-stage {
+    position: relative;
+    min-height: 420px;
     display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    justify-content: center;
   }
-
-  .section-header h2 {
-    margin: 0;
-    font-size: 1.5rem;
+  .floating-card {
+    position: absolute;
+    padding: 1rem 1.1rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.52);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 16px 30px var(--shadow);
+    max-width: 220px;
   }
-
-  .view-all {
-    color: var(--primary);
-    font-size: 0.95rem;
-    text-decoration: none;
-    transition: color 0.2s, transform 0.2s;
+  .floating-card span {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
   }
-
-  .view-all:hover {
-    color: var(--primary-dark);
-    transform: translateY(-1px);
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-  }
-
-  .gallery-card,
-  .gallery-empty {
+  .floating-card strong { line-height: 1.5; font-size: 0.98rem; }
+  .intro-card { top: 4%; left: 2%; transform: rotate(-4deg); }
+  .orbit-card { right: 2%; bottom: 7%; transform: rotate(4deg); }
+  .mosaic { width: min(100%, 520px); position: relative; z-index: 1; }
+  .warm { background: linear-gradient(135deg, rgba(255, 214, 170, 0.86), rgba(255, 244, 230, 0.25)); }
+  .cool { background: linear-gradient(135deg, rgba(153, 246, 228, 0.68), rgba(236, 253, 245, 0.18)); }
+  .ember { background: radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.5), transparent 24%), linear-gradient(135deg, rgba(234, 88, 12, 0.8), rgba(245, 158, 11, 0.28)); }
+  .paper { background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 250, 240, 0.3)), repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(146, 121, 86, 0.09) 18px, rgba(146, 121, 86, 0.09) 19px); }
+  .recent-posts, .gallery-section { display: flex; flex-direction: column; gap: 1.5rem; }
+  .section-header h2 { margin: 0; font-size: 1.6rem; }
+  .view-all { color: var(--primary); font-size: 0.95rem; text-decoration: none; transition: color 0.2s, transform 0.2s; }
+  .view-all:hover { color: var(--primary-dark); transform: translateY(-1px); }
+  .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .gallery-card, .gallery-empty {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: 22px;
     overflow: hidden;
     box-shadow: 0 10px 30px var(--shadow);
   }
-
-  .gallery-card img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+  .gallery-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .gallery-card figcaption { padding: 1rem; }
+  .gallery-card strong { display: block; margin-bottom: 0.4rem; font-size: 1rem; }
+  .gallery-card p, .gallery-empty p { margin: 0; color: var(--text-secondary); line-height: 1.7; }
+  .gallery-empty { padding: 2rem 1.5rem; border-style: dashed; text-align: center; }
+  .quote-card { background: linear-gradient(135deg, rgba(255, 245, 238, 0.82), rgba(233, 248, 245, 0.68)); }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-stage { min-height: 340px; }
   }
-
-  .gallery-card figcaption {
-    padding: 1rem;
-  }
-
-  .gallery-card strong {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-size: 1rem;
-  }
-
-  .gallery-card p,
-  .gallery-empty p {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.7;
-  }
-
-  .gallery-empty {
-    padding: 2rem 1.5rem;
-    border-style: dashed;
-    text-align: center;
-  }
-
   @media (max-width: 768px) {
-    .hero {
-      padding-top: 3rem;
-    }
-
-    .hero-desc {
-      font-size: 1rem;
-    }
-
-    .section-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .posts-grid,
-    .gallery-grid {
-      grid-template-columns: 1fr;
-    }
+    .hero-title { font-size: clamp(2.6rem, 12vw, 3.8rem); }
+    .hero-desc { font-size: 1rem; }
+    .posts-grid, .gallery-grid { grid-template-columns: 1fr; }
+    .hero-stage { min-height: auto; padding-top: 6rem; }
+    .floating-card { max-width: none; }
   }
 </style>

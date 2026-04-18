@@ -5,8 +5,8 @@ import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
 
 const personalInfo = {
-  name: '芠芸',
-  bio: '学习，反思，留痕，向上',
+  name: 'Yunn',
+  bio: '学习，反思，留痕，向内生长',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
   github: 'https://github.com/JJyun-ustc',
 };
@@ -22,7 +22,7 @@ const skills = [
 const timeline = [
   {
     year: '2023',
-    title: '中国科学技术大学 10系',
+    title: '中国科学技术大学相关学习阶段',
     description: 'gpa-4.3++',
   },
   {
@@ -48,115 +48,136 @@ const skillStops = skills
   </head>
   <body>
     <Header />
-    <main class="about-page">
-      <div class="about-header">
-        <div class="avatar">
-          <img src={personalInfo.avatar} alt={personalInfo.name} />
-        </div>
-        <h1>{personalInfo.name}</h1>
-        <p class="bio">{personalInfo.bio}</p>
-        <div class="social-links">
-          <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-            </svg>
-            <span>GitHub</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="about-content">
-        <section class="about-section">
-          <h2>关于博客</h2>
-          <p>请输入文本 ： ）</p>
-        </section>
-
-        <section class="about-section">
-          <h2>技能</h2>
-          <div class="skill-panel">
-            <div class="skill-grid"></div>
-            <div class="skill-glow"></div>
-            <div class="skill-chart-wrap">
-              <div class="skill-ring outer-ring"></div>
-              <div class="skill-ring middle-ring"></div>
-              <div class="scan-ring"></div>
-              <div class="skill-chart" style={`background: conic-gradient(${skillStops});`}>
-                <div class="skill-chart-hole">
-                  <span class="core-title">SKILL</span>
-                  <span class="core-subtitle">SYSTEM</span>
-                </div>
-              </div>
-              {skills.map((skill, index) => {
-                const angle = (360 / skills.length) * index - 90 + 36;
-                const radians = (angle * Math.PI) / 180;
-                const x = Math.cos(radians);
-                const y = Math.sin(radians);
-                const left = 50 + x * 44;
-                const top = 50 + y * 44;
-
-                return (
-                  <div
-                    class="skill-label"
-                    style={`left:${left}%; top:${top}%; --color:${skill.color};`}
-                  >
-                    <span class="skill-beacon"></span>
-                    <span class="skill-name">{skill.name}</span>
-                  </div>
-                );
-              })}
-            </div>
+    <main class="shell">
+      <section class="page-hero intro-hero">
+        <div class="about-header">
+          <div class="avatar">
+            <img src={personalInfo.avatar} alt={personalInfo.name} />
           </div>
-        </section>
-
-        <section class="about-section">
-          <h2>经历</h2>
-          <div class="timeline">
-            {timeline.map((item) => (
-              <div class="timeline-item">
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                  <span class="timeline-year">{item.year}</span>
-                  <h3 class="timeline-title">{item.title}</h3>
-                  <p class="timeline-desc">{item.description}</p>
-                </div>
-              </div>
-            ))}
+          <div>
+            <span class="eyebrow">profile signal</span>
+            <h1>{personalInfo.name}</h1>
+            <p class="bio">{personalInfo.bio}</p>
           </div>
-        </section>
-
-        <section class="about-section">
-          <h2>联系方式</h2>
-          <div class="contact-links">
-            <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" class="contact-link">
+          <div class="social-links">
+            <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" class="social-link">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
               </svg>
-              GitHub
+              <span>GitHub</span>
             </a>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section class="page-grid">
+        <div class="page-main-column">
+          <section class="about-section card-surface">
+            <h2>关于博客</h2>
+            <p>这里保留原本的自述空间，同时把周围留白升级成更完整的展示舞台。</p>
+          </section>
+
+          <section class="about-section card-surface">
+            <h2>技能</h2>
+            <div class="skill-panel">
+              <div class="skill-grid"></div>
+              <div class="skill-glow"></div>
+              <div class="skill-chart-wrap">
+                <div class="skill-ring outer-ring"></div>
+                <div class="skill-ring middle-ring"></div>
+                <div class="scan-ring"></div>
+                <div class="skill-chart" style={`background: conic-gradient(${skillStops});`}>
+                  <div class="skill-chart-hole">
+                    <span class="core-title">SKILL</span>
+                    <span class="core-subtitle">SYSTEM</span>
+                  </div>
+                </div>
+                {skills.map((skill, index) => {
+                  const angle = (360 / skills.length) * index - 90 + 36;
+                  const radians = (angle * Math.PI) / 180;
+                  const x = Math.cos(radians);
+                  const y = Math.sin(radians);
+                  const left = 50 + x * 44;
+                  const top = 50 + y * 44;
+
+                  return (
+                    <div
+                      class="skill-label"
+                      style={`left:${left}%; top:${top}%; --color:${skill.color};`}
+                    >
+                      <span class="skill-beacon"></span>
+                      <span class="skill-name">{skill.name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          <section class="about-section card-surface">
+            <h2>经历</h2>
+            <div class="timeline">
+              {timeline.map((item) => (
+                <div class="timeline-item">
+                  <div class="timeline-marker"></div>
+                  <div class="timeline-content">
+                    <span class="timeline-year">{item.year}</span>
+                    <h3 class="timeline-title">{item.title}</h3>
+                    <p class="timeline-desc">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section class="about-section card-surface">
+            <h2>联系方式</h2>
+            <div class="contact-links">
+              <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                GitHub
+              </a>
+            </div>
+          </section>
+        </div>
+
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Side Notes</h3>
+            <p>关于页原本已经有视觉想法，我保留它的科技感，把空白继续扩展成侧向说明层。</p>
+          </div>
+          <div class="side-card">
+            <h3>Keywords</h3>
+            <div class="pill-list">
+              {skills.map((skill) => (
+                <span>{skill.name}</span>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  .about-page {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+  .intro-hero {
+    padding: 1.5rem 1.75rem;
   }
 
   .about-header {
-    text-align: center;
-    padding: 3rem 0;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
   }
 
   .avatar {
     width: 120px;
     height: 120px;
-    margin: 0 auto 1.5rem;
     border-radius: 50%;
     overflow: hidden;
     background: linear-gradient(135deg, #071a3d, #3a0b77);
@@ -172,57 +193,31 @@ const skillStops = skills
     background: var(--card-bg);
   }
 
-  .about-header h1 {
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-  }
-
   .bio {
     color: var(--text-secondary);
-    margin: 0 0 1.5rem;
-    font-size: 1.1rem;
-  }
-
-  .social-links {
-    display: flex;
-    justify-content: center;
+    margin: 0.75rem 0 0;
+    font-size: 1.05rem;
   }
 
   .social-link {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.65rem 1rem;
+    padding: 0.7rem 1rem;
     background: linear-gradient(135deg, rgba(11, 20, 47, 0.9), rgba(38, 9, 73, 0.92));
     border: 1px solid rgba(91, 140, 255, 0.3);
     border-radius: 999px;
     color: #e8f2ff;
     text-decoration: none;
     box-shadow: 0 12px 30px rgba(15, 21, 51, 0.28);
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-  }
-
-  .social-link:hover {
-    border-color: #23f2ff;
-    transform: translateY(-2px);
-    box-shadow: 0 0 22px rgba(35, 242, 255, 0.22);
-  }
-
-  .about-section {
-    margin-bottom: 2.8rem;
   }
 
   .about-section h2 {
-    font-size: 1.5rem;
     margin-bottom: 1.25rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border);
   }
 
   .about-section p {
     color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1rem;
   }
 
   .skill-panel {
@@ -408,10 +403,6 @@ const skillStops = skills
     border: 3px solid var(--card-bg);
   }
 
-  .timeline-content {
-    padding-left: 0.5rem;
-  }
-
   .timeline-year {
     display: inline-block;
     font-size: 0.875rem;
@@ -428,7 +419,6 @@ const skillStops = skills
   .timeline-desc {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--text-secondary);
   }
 
   .contact-links {
@@ -441,42 +431,35 @@ const skillStops = skills
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: var(--card-bg);
+    padding: 0.85rem 1.4rem;
+    background: rgba(255, 255, 255, 0.3);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 999px;
     color: var(--text);
     text-decoration: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .contact-link:hover {
-    border-color: var(--primary);
-    box-shadow: 0 4px 12px var(--shadow);
   }
 
   @keyframes orbit {
     from {
       transform: rotate(0deg);
     }
-
     to {
       transform: rotate(360deg);
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .about-header {
-      padding: 2rem 0;
+      grid-template-columns: 1fr;
+      text-align: center;
+      justify-items: center;
     }
+  }
 
+  @media (max-width: 768px) {
     .avatar {
       width: 100px;
       height: 100px;
-    }
-
-    .about-header h1 {
-      font-size: 1.5rem;
     }
 
     .skill-panel {

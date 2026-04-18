@@ -35,59 +35,41 @@ const posts = allPosts
   </head>
   <body>
     <Header />
-    <main>
-      <nav class="breadcrumb">
-        <a href={withBase('tags/')}>标签</a>
-        <span>/</span>
-        <span>{tag}</span>
-      </nav>
-      <h1>#{tag}</h1>
-      <p class="page-desc">共 {posts.length} 篇文章</p>
-      <div class="posts-grid">
-        {posts.map((post) => (
-          <BlogCard post={post} />
-        ))}
-      </div>
+    <main class="shell">
+      <section class="page-hero">
+        <nav class="breadcrumb">
+          <a href={withBase('tags/')}>标签</a>
+          <span>/</span>
+          <span>{tag}</span>
+        </nav>
+        <h1>#{tag}</h1>
+        <p class="page-desc">共 {posts.length} 篇文章</p>
+      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <div class="card-surface">
+            <div class="posts-grid">
+              {posts.map((post) => (
+                <BlogCard post={post} />
+              ))}
+            </div>
+          </div>
+        </div>
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Current Tag</h3>
+            <p>标签详情页也拥有完整的横向布局，不再只是一列卡片。</p>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  .breadcrumb {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-  }
-
-  .breadcrumb a {
-    color: var(--text-muted);
-    text-decoration: none;
-  }
-
-  .breadcrumb a:hover {
-    color: var(--primary);
-  }
-
-  h1 {
-    margin-bottom: 0.5rem;
-    color: var(--primary);
-  }
-
-  .page-desc {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  @media (max-width: 768px) {
-    .posts-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  .breadcrumb { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; }
+  .breadcrumb a { color: var(--text-muted); }
+  .page-desc { color: var(--text-muted); margin: 0; }
+  .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
 </style>

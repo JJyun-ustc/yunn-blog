@@ -7,8 +7,11 @@ import BlogCard from '../../components/BlogCard.astro';
 import { SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog'))
-  .filter(post => !post.data.draft)
+  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const latest = posts[0];
+const categories = [...new Set(posts.map((post) => post.data.category || '随笔'))].slice(0, 6);
 ---
 
 <!doctype html>
@@ -18,38 +21,64 @@ const posts = (await getCollection('blog'))
   </head>
   <body>
     <Header />
-    <main>
-      <h1>博客文章</h1>
-      <p class="page-desc">共 {posts.length} 篇文章</p>
-      <div class="posts-grid">
-        {posts.map((post) => (
-          <BlogCard post={post} />
-        ))}
-      </div>
+    <main class="shell">
+      <section class="page-hero">
+        <span class="eyebrow">archive stream</span>
+        <h1>博客文章</h1>
+        <p class="page-desc">共 {posts.length} 篇文章</p>
+        <div class="stat-row">
+          <div class="stat-card">
+            <strong>{posts.length}</strong>
+            <span>total entries</span>
+          </div>
+          <div class="stat-card">
+            <strong>{categories.length}</strong>
+            <span>active groups</span>
+          </div>
+          <div class="stat-card">
+            <strong>{latest ? latest.data.pubDate.getFullYear() : '--'}</strong>
+            <span>latest year</span>
+          </div>
+        </div>
+      </section>
+      <section class="page-grid">
+        <div class="page-main-column">
+          <div class="card-surface">
+            <div class="section-heading-block">
+              <div>
+                <h2>All Posts</h2>
+                <p>内容不变，阅读入口更舒展，列表在大屏上会自然铺开。</p>
+              </div>
+            </div>
+            <div class="posts-grid">
+              {posts.map((post) => (
+                <BlogCard post={post} />
+              ))}
+            </div>
+          </div>
+        </div>
+        <aside class="page-side-column">
+          <div class="side-card">
+            <h3>Quick Scan</h3>
+            <p>这页负责广域浏览，所以两侧变成节奏板，而不是空白边框。</p>
+          </div>
+          <div class="side-card">
+            <h3>Categories</h3>
+            <div class="pill-list">
+              {categories.map((category) => (
+                <span>{category}</span>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </section>
     </main>
     <Footer />
   </body>
 </html>
 
 <style>
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-
-  .page-desc {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-  }
-
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  @media (max-width: 768px) {
-    .posts-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  .page-desc { color: var(--text-muted); margin: 0 0 1.25rem; }
+  .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
+  @media (max-width: 768px) { .posts-grid { grid-template-columns: 1fr; } }
 </style>

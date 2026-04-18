@@ -96,18 +96,19 @@ import { withBase } from '../utils/paths';
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
     border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(18px);
   }
 
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px;
+    max-width: var(--site-max);
     margin: 0 auto;
-    padding: 0.75rem 1rem;
+    padding: 0.85rem var(--page-gutter);
+    gap: 1rem;
   }
 
   .logo {
@@ -117,6 +118,7 @@ import { withBase } from '../utils/paths';
   .logo-text {
     font-size: 1.5rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -126,6 +128,10 @@ import { withBase } from '../utils/paths';
   .nav-links {
     display: flex;
     gap: 0.5rem;
+    padding: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.32);
   }
 
   .nav-actions {
@@ -140,14 +146,16 @@ import { withBase } from '../utils/paths';
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 999px;
     color: var(--text-secondary);
-    transition: background-color 0.2s, color 0.2s;
+    border: 1px solid transparent;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
   }
 
   .admin-link:hover {
-    background: var(--border);
+    background: rgba(255, 255, 255, 0.4);
     color: var(--primary);
+    border-color: var(--border);
   }
 
   .menu-toggle {
@@ -156,7 +164,7 @@ import { withBase } from '../utils/paths';
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 999px;
     background: transparent;
     border: none;
     color: var(--text);
@@ -165,7 +173,7 @@ import { withBase } from '../utils/paths';
   }
 
   .menu-toggle:hover {
-    background: var(--border);
+    background: rgba(255, 255, 255, 0.4);
   }
 
   .mobile-menu-overlay {
@@ -189,8 +197,8 @@ import { withBase } from '../utils/paths';
     right: -280px;
     width: 280px;
     height: 100%;
-    background: var(--bg-secondary);
-    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1);
+    background: color-mix(in srgb, var(--bg-secondary) 96%, transparent);
+    box-shadow: -20px 0 40px var(--shadow-strong);
     transition: right 0.3s ease;
     z-index: 300;
     display: flex;
@@ -224,7 +232,7 @@ import { withBase } from '../utils/paths';
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 999px;
     background: transparent;
     border: none;
     color: var(--text);
@@ -233,7 +241,7 @@ import { withBase } from '../utils/paths';
   }
 
   .mobile-menu-close:hover {
-    background: var(--border);
+    background: rgba(255, 255, 255, 0.4);
   }
 
   .mobile-menu-content {
