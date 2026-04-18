@@ -6,30 +6,36 @@ import { SITE_TITLE } from '../consts';
 
 const personalInfo = {
   name: 'Yunn',
-  bio: '学习，反思，留痕，向内生长',
+  bio: '学习，反思，留痕，向内生长。',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
   github: 'https://github.com/JJyun-ustc',
 };
 
 const skills = [
-  { name: 'python/C', color: '#5b8cff' },
+  { name: 'Python / C', color: '#5b8cff' },
   { name: '控制理论', color: '#23f2ff' },
-  { name: 'matlab', color: '#ff5db1' },
-  { name: 'ViT', color: '#a6ff47' },
-  { name: 'pornhub', color: '#ff8a1f' },
+  { name: 'MATLAB', color: '#ff5db1' },
+  { name: 'Vision Transformer', color: '#a6ff47' },
+  { name: '写作与整理', color: '#ff8a1f' },
 ];
 
 const timeline = [
   {
     year: '2023',
     title: '中国科学技术大学相关学习阶段',
-    description: 'gpa-4.3++',
+    description: '持续积累训练、实验与阅读笔记。',
   },
   {
     year: '2026',
     title: '未知，待续',
-    description: '故事还没写完。',
+    description: '故事还没写完，页面会继续生长。',
   },
+];
+
+const statusCards = [
+  { label: '近况', value: '实验 / 阅读 / 记录' },
+  { label: '偏好', value: '把混乱慢慢整理出纹理' },
+  { label: '节奏', value: '白天推导，夜里收束' },
 ];
 
 const skillStops = skills
@@ -74,22 +80,35 @@ const skillStops = skills
         <div class="page-main-column">
           <section class="about-section card-surface">
             <h2>关于博客</h2>
-            <p>这里保留原本的自述空间，同时把周围留白升级成更完整的展示舞台。</p>
+            <p>这个博客更像一个长期展开的个人现场：有时记笔记，有时放图片，有时只是在页面上留下当天的心流痕迹。</p>
+            <div class="status-grid">
+              {statusCards.map((card) => (
+                <div class="status-card">
+                  <span>{card.label}</span>
+                  <strong>{card.value}</strong>
+                </div>
+              ))}
+            </div>
           </section>
 
           <section class="about-section card-surface">
-            <h2>技能</h2>
+            <h2>技能结构</h2>
             <div class="skill-panel">
               <div class="skill-grid"></div>
               <div class="skill-glow"></div>
+              <div class="signal-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
               <div class="skill-chart-wrap">
                 <div class="skill-ring outer-ring"></div>
                 <div class="skill-ring middle-ring"></div>
                 <div class="scan-ring"></div>
                 <div class="skill-chart" style={`background: conic-gradient(${skillStops});`}>
                   <div class="skill-chart-hole">
-                    <span class="core-title">SKILL</span>
-                    <span class="core-subtitle">SYSTEM</span>
+                    <span class="core-title">FOCUS</span>
+                    <span class="core-subtitle">MATRIX</span>
                   </div>
                 </div>
                 {skills.map((skill, index) => {
@@ -144,12 +163,16 @@ const skillStops = skills
         </div>
 
         <aside class="page-side-column">
-          <div class="side-card">
-            <h3>Side Notes</h3>
-            <p>关于页原本已经有视觉想法，我保留它的科技感，把空白继续扩展成侧向说明层。</p>
+          <div class="side-card pulse-card">
+            <h3>当前信号</h3>
+            <div class="pulse-list">
+              <span>阅读密度上升</span>
+              <span>记录欲持续</span>
+              <span>页面仍在扩写</span>
+            </div>
           </div>
           <div class="side-card">
-            <h3>Keywords</h3>
+            <h3>关键词</h3>
             <div class="pill-list">
               {skills.map((skill) => (
                 <span>{skill.name}</span>
@@ -164,17 +187,8 @@ const skillStops = skills
 </html>
 
 <style>
-  .intro-hero {
-    padding: 1.5rem 1.75rem;
-  }
-
-  .about-header {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
+  .intro-hero { padding: 1.5rem 1.75rem; }
+  .about-header { display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; align-items: center; }
   .avatar {
     width: 120px;
     height: 120px;
@@ -184,21 +198,8 @@ const skillStops = skills
     padding: 3px;
     box-shadow: 0 0 28px rgba(35, 242, 255, 0.22);
   }
-
-  .avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--card-bg);
-  }
-
-  .bio {
-    color: var(--text-secondary);
-    margin: 0.75rem 0 0;
-    font-size: 1.05rem;
-  }
-
+  .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: var(--card-bg); }
+  .bio { color: var(--text-secondary); margin: 0.75rem 0 0; font-size: 1.05rem; }
   .social-link {
     display: inline-flex;
     align-items: center;
@@ -211,15 +212,31 @@ const skillStops = skills
     text-decoration: none;
     box-shadow: 0 12px 30px rgba(15, 21, 51, 0.28);
   }
-
-  .about-section h2 {
-    margin-bottom: 1.25rem;
+  .about-section h2 { margin-bottom: 1.25rem; }
+  .about-section p { color: var(--text-secondary); }
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.9rem;
+    margin-top: 1.25rem;
   }
-
-  .about-section p {
-    color: var(--text-secondary);
+  .status-card {
+    padding: 1rem;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.34);
   }
-
+  .status-card span {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    margin-bottom: 0.4rem;
+  }
+  .status-card strong {
+    display: block;
+    line-height: 1.6;
+    font-size: 0.98rem;
+  }
   .skill-panel {
     position: relative;
     overflow: hidden;
@@ -232,14 +249,7 @@ const skillStops = skills
     border: 1px solid rgba(91, 140, 255, 0.22);
     box-shadow: 0 30px 60px rgba(5, 10, 28, 0.35);
   }
-
-  .skill-grid,
-  .skill-glow {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
+  .skill-grid, .skill-glow, .signal-lines { position: absolute; inset: 0; pointer-events: none; }
   .skill-grid {
     background-image:
       linear-gradient(rgba(91, 140, 255, 0.12) 1px, transparent 1px),
@@ -247,56 +257,39 @@ const skillStops = skills
     background-size: 34px 34px;
     mask-image: radial-gradient(circle at center, black 42%, transparent 88%);
   }
-
   .skill-glow {
     background:
       radial-gradient(circle at center, rgba(35, 242, 255, 0.14), transparent 34%),
       radial-gradient(circle at center, rgba(166, 255, 71, 0.1), transparent 50%);
   }
-
-  .skill-chart-wrap {
-    position: relative;
-    width: min(100%, 560px);
-    aspect-ratio: 1;
-    margin: 0 auto;
+  .signal-lines {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
   }
-
-  .skill-ring,
-  .scan-ring {
-    position: absolute;
-    border-radius: 50%;
+  .signal-lines span {
+    width: 4px;
+    border-radius: 999px;
+    background: rgba(126, 238, 255, 0.7);
+    animation: equalize 1.8s ease-in-out infinite;
   }
-
-  .skill-ring {
-    border: 1px solid rgba(91, 140, 255, 0.22);
-  }
-
-  .outer-ring {
-    inset: 6%;
-    box-shadow: 0 0 35px rgba(35, 242, 255, 0.08);
-  }
-
-  .middle-ring {
-    inset: 14%;
-    border-style: dashed;
-    animation: orbit 18s linear infinite;
-  }
-
-  .scan-ring {
-    inset: 2%;
-    border: 1px solid rgba(35, 242, 255, 0.18);
-    box-shadow: inset 0 0 24px rgba(35, 242, 255, 0.06);
-  }
-
+  .signal-lines span:nth-child(1) { height: 20%; animation-delay: 0s; }
+  .signal-lines span:nth-child(2) { height: 32%; animation-delay: 0.3s; }
+  .signal-lines span:nth-child(3) { height: 24%; animation-delay: 0.6s; }
+  .skill-chart-wrap { position: relative; width: min(100%, 560px); aspect-ratio: 1; margin: 0 auto; }
+  .skill-ring, .scan-ring { position: absolute; border-radius: 50%; }
+  .skill-ring { border: 1px solid rgba(91, 140, 255, 0.22); }
+  .outer-ring { inset: 6%; box-shadow: 0 0 35px rgba(35, 242, 255, 0.08); }
+  .middle-ring { inset: 14%; border-style: dashed; animation: orbit 18s linear infinite; }
+  .scan-ring { inset: 2%; border: 1px solid rgba(35, 242, 255, 0.18); box-shadow: inset 0 0 24px rgba(35, 242, 255, 0.06); }
   .skill-chart {
     position: absolute;
     inset: 22%;
     border-radius: 50%;
-    box-shadow:
-      0 0 34px rgba(35, 242, 255, 0.18),
-      0 0 68px rgba(91, 140, 255, 0.14);
+    box-shadow: 0 0 34px rgba(35, 242, 255, 0.18), 0 0 68px rgba(91, 140, 255, 0.14);
   }
-
   .skill-chart::before {
     content: '';
     position: absolute;
@@ -304,7 +297,6 @@ const skillStops = skills
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
-
   .skill-chart-hole {
     position: absolute;
     inset: 24%;
@@ -319,24 +311,14 @@ const skillStops = skills
     justify-content: center;
     box-shadow: inset 0 0 24px rgba(35, 242, 255, 0.08);
   }
-
-  .core-title,
-  .core-subtitle {
+  .core-title, .core-subtitle {
     display: block;
     font-weight: 700;
     letter-spacing: 0.28em;
     color: #e7f2ff;
   }
-
-  .core-title {
-    font-size: 1rem;
-  }
-
-  .core-subtitle {
-    font-size: 0.72rem;
-    color: #7eeeff;
-  }
-
+  .core-title { font-size: 1rem; }
+  .core-subtitle { font-size: 0.72rem; color: #7eeeff; }
   .skill-label {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -347,51 +329,21 @@ const skillStops = skills
     border-radius: 999px;
     border: 1px solid color-mix(in srgb, var(--color) 45%, rgba(255, 255, 255, 0.1));
     background: linear-gradient(135deg, rgba(7, 18, 43, 0.92), rgba(25, 9, 54, 0.88));
-    box-shadow:
-      0 0 18px color-mix(in srgb, var(--color) 22%, transparent),
-      inset 0 0 14px rgba(255, 255, 255, 0.03);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--color) 22%, transparent), inset 0 0 14px rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
   }
-
   .skill-beacon {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: var(--color);
-    box-shadow:
-      0 0 0 4px color-mix(in srgb, var(--color) 16%, transparent),
-      0 0 16px color-mix(in srgb, var(--color) 70%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color) 16%, transparent), 0 0 16px color-mix(in srgb, var(--color) 70%, transparent);
     flex-shrink: 0;
   }
-
-  .skill-name {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: #edf6ff;
-    text-shadow: 0 0 14px color-mix(in srgb, var(--color) 45%, transparent);
-    white-space: nowrap;
-  }
-
-  .timeline {
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 7px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--border);
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: 2rem;
-  }
-
+  .skill-name { font-size: 0.92rem; font-weight: 700; color: #edf6ff; text-shadow: 0 0 14px color-mix(in srgb, var(--color) 45%, transparent); white-space: nowrap; }
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 2rem; }
   .timeline-marker {
     position: absolute;
     left: -2rem;
@@ -402,31 +354,10 @@ const skillStops = skills
     background: var(--primary);
     border: 3px solid var(--card-bg);
   }
-
-  .timeline-year {
-    display: inline-block;
-    font-size: 0.875rem;
-    color: var(--primary);
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  .timeline-title {
-    margin: 0 0 0.5rem;
-    font-size: 1.1rem;
-  }
-
-  .timeline-desc {
-    margin: 0;
-    font-size: 0.9rem;
-  }
-
-  .contact-links {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
+  .timeline-year { display: inline-block; font-size: 0.875rem; color: var(--primary); font-weight: 600; margin-bottom: 0.25rem; }
+  .timeline-title { margin: 0 0 0.5rem; font-size: 1.1rem; }
+  .timeline-desc { margin: 0; font-size: 0.9rem; }
+  .contact-links { display: flex; gap: 1rem; flex-wrap: wrap; }
   .contact-link {
     display: inline-flex;
     align-items: center;
@@ -438,49 +369,43 @@ const skillStops = skills
     color: var(--text);
     text-decoration: none;
   }
-
-  @keyframes orbit {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  .pulse-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .pulse-list span {
+    position: relative;
+    display: block;
+    padding-left: 1.2rem;
+    color: var(--text-secondary);
   }
-
+  .pulse-list span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.35);
+    animation: ping 2s ease-out infinite;
+  }
+  @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes equalize {
+    0%, 100% { transform: scaleY(0.55); opacity: 0.55; }
+    50% { transform: scaleY(1.15); opacity: 1; }
+  }
+  @keyframes ping {
+    0% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.35); }
+    100% { box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
+  }
   @media (max-width: 900px) {
-    .about-header {
-      grid-template-columns: 1fr;
-      text-align: center;
-      justify-items: center;
-    }
+    .about-header { grid-template-columns: 1fr; text-align: center; justify-items: center; }
   }
-
   @media (max-width: 768px) {
-    .avatar {
-      width: 100px;
-      height: 100px;
-    }
-
-    .skill-panel {
-      padding: 1.25rem 0.5rem;
-    }
-
-    .skill-chart-wrap {
-      width: 100%;
-      min-height: 420px;
-    }
-
-    .skill-chart {
-      inset: 24%;
-    }
-
-    .skill-label {
-      padding: 0.35rem 0.55rem;
-    }
-
-    .skill-name {
-      font-size: 0.76rem;
-    }
+    .avatar { width: 100px; height: 100px; }
+    .skill-panel { padding: 1.25rem 0.5rem; }
+    .skill-chart-wrap { width: 100%; min-height: 420px; }
+    .skill-chart { inset: 24%; }
+    .skill-label { padding: 0.35rem 0.55rem; }
+    .skill-name { font-size: 0.76rem; }
   }
 </style>

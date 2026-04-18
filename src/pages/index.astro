@@ -15,6 +15,11 @@ const posts = (await getCollection('blog'))
 
 const galleryItems = galleryData.images ?? [];
 const totalMoments = galleryItems.length + posts.length;
+const rotatingLines = [
+  '慢慢收集，慢慢发亮。',
+  '把碎片整理成可停留的界面。',
+  '让留白也开始说话。',
+];
 ---
 
 <!doctype html>
@@ -29,7 +34,7 @@ const totalMoments = galleryItems.length + posts.length;
         <div class="hero-copy">
           <span class="eyebrow">personal signal</span>
           <h1 class="hero-title">Yunn 的 <span class="highlight">发呆网页</span></h1>
-          <p class="hero-desc">记录点滴，分享随笔，把原本空着的两侧也变成页面的一部分。</p>
+          <p class="hero-desc">记录点滴，分享随笔，把原本空着的两侧也拉进叙事里。</p>
           <div class="stat-row">
             <div class="stat-card">
               <strong>{posts.length}</strong>
@@ -52,7 +57,7 @@ const totalMoments = galleryItems.length + posts.length;
           </div>
           <div class="floating-card orbit-card">
             <span>Current Mood</span>
-            <strong>Warm / Restless / Recording</strong>
+            <strong id="rotating-line">{rotatingLines[0]}</strong>
           </div>
           <div class="mosaic">
             <div class="wide warm"></div>
@@ -71,7 +76,7 @@ const totalMoments = galleryItems.length + posts.length;
             <div class="section-heading-block section-header">
               <div>
                 <h2>最新文章</h2>
-                <p>保留原有内容，同时让首页拥有更宽阔的浏览节奏。</p>
+                <p>首页不再只是一条中间走廊，而是能停留、扫读和漫游的整块画布。</p>
               </div>
               <a href={withBase('blog/')} class="view-all">查看全部 →</a>
             </div>
@@ -86,7 +91,7 @@ const totalMoments = galleryItems.length + posts.length;
             <div class="section-heading-block section-header">
               <div>
                 <h2>my cherished picture</h2>
-                <p>图片区保留原有展示，同时承担首页下半场的视觉换气。</p>
+                <p>图片区域继续保留，但节奏变得更开阔，能和文字一起呼吸。</p>
               </div>
             </div>
 
@@ -114,12 +119,13 @@ const totalMoments = galleryItems.length + posts.length;
         </div>
 
         <aside class="page-side-column">
-          <div class="side-card">
-            <h3>Scene Notes</h3>
-            <p>两侧空白不再只是背景，而是陪衬正文与图片的场景层。</p>
+          <div class="side-card live-card">
+            <h3>此刻</h3>
+            <strong id="live-clock">--:--:--</strong>
+            <p id="live-date">----/--/--</p>
           </div>
           <div class="side-card">
-            <h3>Browse By</h3>
+            <h3>漫游入口</h3>
             <div class="pill-list">
               <a href={withBase('blog/')}>Blog</a>
               <a href={withBase('archive/')}>Archive</a>
@@ -127,14 +133,50 @@ const totalMoments = galleryItems.length + posts.length;
               <a href={withBase('friends/')}>Friends</a>
             </div>
           </div>
-          <div class="side-card quote-card">
-            <h3>Ambient Line</h3>
-            <p>“把页面当作房间来布置，而不是把文字钉在一条细长的墙上。”</p>
+          <div class="side-card pulse-card">
+            <h3>页面状态</h3>
+            <div class="pulse-list">
+              <span>文章在更新</span>
+              <span>图像在补全</span>
+              <span>版式仍在生长</span>
+            </div>
           </div>
         </aside>
       </section>
     </main>
     <Footer />
+
+    <script define:vars={{ rotatingLines }}>
+      const lineNode = document.getElementById('rotating-line');
+      const clockNode = document.getElementById('live-clock');
+      const dateNode = document.getElementById('live-date');
+      let lineIndex = 0;
+
+      function updateClock() {
+        const now = new Date();
+        if (clockNode) {
+          clockNode.textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+        }
+        if (dateNode) {
+          dateNode.textContent = now.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'short',
+          });
+        }
+      }
+
+      function rotateLine() {
+        if (!lineNode) return;
+        lineIndex = (lineIndex + 1) % rotatingLines.length;
+        lineNode.textContent = rotatingLines[lineIndex];
+      }
+
+      updateClock();
+      setInterval(updateClock, 1000);
+      setInterval(rotateLine, 3200);
+    </script>
   </body>
 </html>
 
@@ -147,19 +189,8 @@ const totalMoments = galleryItems.length + posts.length;
     align-items: center;
     padding: clamp(1.75rem, 3vw, 3rem);
   }
-  .hero-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    position: relative;
-    z-index: 1;
-  }
-  .hero-title {
-    font-size: clamp(2.8rem, 7vw, 5.8rem);
-    margin: 0;
-    line-height: 0.98;
-    letter-spacing: 0.04em;
-  }
+  .hero-copy { display: flex; flex-direction: column; gap: 1.25rem; position: relative; z-index: 1; }
+  .hero-title { font-size: clamp(2.8rem, 7vw, 5.8rem); margin: 0; line-height: 0.98; letter-spacing: 0.04em; }
   .highlight {
     display: inline-block;
     margin-left: 0.2em;
@@ -168,19 +199,8 @@ const totalMoments = galleryItems.length + posts.length;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .hero-desc {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin: 0;
-    max-width: 40rem;
-  }
-  .hero-stage {
-    position: relative;
-    min-height: 420px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  .hero-desc { font-size: 1.1rem; color: var(--text-secondary); margin: 0; max-width: 40rem; }
+  .hero-stage { position: relative; min-height: 420px; display: flex; align-items: center; justify-content: center; }
   .floating-card {
     position: absolute;
     padding: 1rem 1.1rem;
@@ -225,7 +245,36 @@ const totalMoments = galleryItems.length + posts.length;
   .gallery-card strong { display: block; margin-bottom: 0.4rem; font-size: 1rem; }
   .gallery-card p, .gallery-empty p { margin: 0; color: var(--text-secondary); line-height: 1.7; }
   .gallery-empty { padding: 2rem 1.5rem; border-style: dashed; text-align: center; }
-  .quote-card { background: linear-gradient(135deg, rgba(255, 245, 238, 0.82), rgba(233, 248, 245, 0.68)); }
+  .live-card strong {
+    display: block;
+    font-size: 1.8rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .live-card p { margin: 0; }
+  .pulse-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .pulse-list span {
+    position: relative;
+    display: block;
+    padding-left: 1.2rem;
+    color: var(--text-secondary);
+  }
+  .pulse-list span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.35);
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.35); }
+    100% { box-shadow: 0 0 0 10px rgba(15, 118, 110, 0); }
+  }
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; }
     .hero-stage { min-height: 340px; }
