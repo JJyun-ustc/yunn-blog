@@ -127,37 +127,69 @@ const rotatingLines = [
             </div>
           </div>
           <div class="side-card scene-3d">
-            <h3>Good Mood</h3>
-            <div class="scene-container">
-              <div class="universe">
-                <div class="sun-3d"></div>
-                <div class="orbit-core">
-                  <div class="earth-tilt">
-                    <div class="earth">
-                      <div class="ocean"></div>
-                      <div class="continent c1"></div>
-                      <div class="continent c2"></div>
-                      <div class="continent c3"></div>
-                      <div class="atmosphere"></div>
-                    </div>
-                  </div>
+            <h3 class="glow-title">Good Mood</h3>
+            <div class="nature-scene">
+              <div class="sky"></div>
+              <div class="sun-rays">
+                <div class="ray ray-1"></div>
+                <div class="ray ray-2"></div>
+                <div class="ray ray-3"></div>
+              </div>
+              <div class="sun-glow"></div>
+              <div class="clouds-3d">
+                <div class="cloud-3d cld-1"></div>
+                <div class="cloud-3d cld-2"></div>
+                <div class="cloud-3d cld-3"></div>
+              </div>
+              <div class="mountains-3d">
+                <div class="peak peak-1"></div>
+                <div class="peak peak-2"></div>
+                <div class="peak peak-3"></div>
+              </div>
+              <div class="forest">
+                <div class="tree-3d t1">
+                  <div class="trunk"></div>
+                  <div class="foliage"></div>
                 </div>
-                <div class="orbit orbit-1">
-                  <div class="moon-orbit"></div>
+                <div class="tree-3d t2">
+                  <div class="trunk"></div>
+                  <div class="foliage"></div>
                 </div>
-                <div class="orbit orbit-2">
-                  <div class="satellite s1"></div>
+                <div class="tree-3d t3">
+                  <div class="trunk"></div>
+                  <div class="foliage"></div>
                 </div>
-                <div class="orbit orbit-3">
-                  <div class="satellite s2"></div>
+                <div class="tree-3d t4">
+                  <div class="trunk"></div>
+                  <div class="foliage"></div>
                 </div>
-                <div class="stars-field">
-                  <div class="star-particle" style="--x:10%; --y:15%; --z:50;"></div>
-                  <div class="star-particle" style="--x:70%; --y:20%; --z:30;"></div>
-                  <div class="star-particle" style="--x:30%; --y:70%; --z:40;"></div>
-                  <div class="star-particle" style="--x:80%; --y:60%; --z:60;"></div>
-                  <div class="star-particle" style="--x:50%; --y:40%; --z:20;"></div>
+                <div class="tree-3d t5">
+                  <div class="trunk"></div>
+                  <div class="foliage"></div>
                 </div>
+                <div class="tree-3d t6">
+                  <div class="trunk"></div>
+                  <div class="foliage"></div>
+                </div>
+              </div>
+              <div class="ground"></div>
+              <div class="particles">
+                <div class="particle p1"></div>
+                <div class="particle p2"></div>
+                <div class="particle p3"></div>
+                <div class="particle p4"></div>
+                <div class="particle p5"></div>
+              </div>
+              <div class="birds">
+                <div class="bird b1"></div>
+                <div class="bird b2"></div>
+                <div class="bird b3"></div>
+              </div>
+              <div class="fireflies-3d">
+                <div class="fly f1"></div>
+                <div class="fly f2"></div>
+                <div class="fly f3"></div>
+                <div class="fly f4"></div>
               </div>
             </div>
           </div>
@@ -273,175 +305,265 @@ const rotatingLines = [
   }
   .live-card p { margin: 0; }
   .scene-3d {
-    height: 240px;
+    height: 260px;
     overflow: hidden;
     border-radius: 20px;
     position: relative;
-    background: radial-gradient(ellipse at center bottom, #1a1a2e 0%, #0a0a1a 50%, #000 100%);
-    perspective: 600px;
+    background: linear-gradient(180deg, #87ceeb 0%, #e0f7fa 30%, #b8e994 60%, #78c95f 100%);
     transform-style: preserve-3d;
   }
-  .scene-container {
+  .glow-title {
+    position: relative;
+    color: #ff6f00;
+    text-shadow: 
+      0 0 10px #ffb300,
+      0 0 20px #ff8f00,
+      0 0 30px #ff6f00,
+      0 0 40px #ffca28;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes titleGlow {
+    0% { text-shadow: 0 0 10px #ffb300, 0 0 20px #ff8f00, 0 0 30px #ff6f00, 0 0 40px #ffca28; }
+    100% { text-shadow: 0 0 15px #ffca28, 0 0 30px #ffb300, 0 0 45px #ff8f00, 0 0 60px #ff6f00; }
+  }
+  .nature-scene {
     position: relative;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transform: rotateX(45deg);
-    transform-origin: center bottom;
   }
-  .universe {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 180px;
-    height: 180px;
-    transform-style: preserve-3d;
-    animation: systemOrbit 25s linear infinite;
-  }
-  .sun-3d {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px;
-    height: 50px;
-    background: radial-gradient(circle, #fff7ed 0%, #fbbf24 40%, #f59e0b 80%, #ea580c 100%);
-    border-radius: 50%;
-    box-shadow: 
-      0 0 30px #fbbf24,
-      0 0 60px rgba(251, 191, 36, 0.5),
-      0 0 100px rgba(251, 191, 36, 0.3),
-      inset 0 0 20px rgba(255, 255, 255, 0.4);
-    animation: sunPulse 3s ease-in-out infinite;
-  }
-  .orbit-core {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    transform-style: preserve-3d;
-  }
-  .earth-tilt {
-    transform: rotateX(-20deg);
-    transform-style: preserve-3d;
-  }
-  .earth {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background: radial-gradient(circle at 30% 30%, #4fc3f7 0%, #0288d1 50%, #01579b 100%);
-    border-radius: 50%;
-    transform-style: preserve-3d;
-    animation: earthSpin 4s linear infinite;
-    box-shadow: 
-      0 0 10px rgba(2, 136, 209, 0.6),
-      inset -3px -3px 8px rgba(0, 0, 0, 0.3);
-  }
-  .ocean {
+  .sky {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
-    background: linear-gradient(135deg, transparent 40%, rgba(33, 150, 243, 0.3) 100%);
+    background: linear-gradient(180deg, #87ceeb 0%, #b3e5fc 50%, #e1f5fe 100%);
   }
-  .continent {
+  .sun-rays {
     position: absolute;
-    background: #4caf50;
-    border-radius: 40% 60% 50% 40%;
-    opacity: 0.85;
+    top: 8%;
+    right: 15%;
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, -50%);
   }
-  .c1 { width: 8px; height: 10px; top: 20%; left: 25%; }
-  .c2 { width: 6px; height: 8px; top: 45%; left: 55%; }
-  .c3 { width: 5px; height: 6px; top: 60%; left: 30%; }
-  .atmosphere {
+  .ray {
     position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(129, 212, 250, 0.3), transparent 60%);
-    animation: atmosphereGlow 2s ease-in-out infinite;
-  }
-  .orbit {
-    position: absolute;
-    left: 50%;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255, 193, 7, 0.9), transparent);
     top: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) rotateX(75deg);
+    left: 50%;
+    transform-origin: left center;
+    animation: rayRotate 8s linear infinite;
   }
-  .orbit-1 { width: 90px; height: 30px; animation: orbitSpin 8s linear infinite; }
-  .orbit-2 { width: 130px; height: 43px; animation: orbitSpin 12s linear infinite reverse; }
-  .orbit-3 { width: 170px; height: 57px; animation: orbitSpin 16s linear infinite; }
-  .moon-orbit {
+  .ray-1 { transform: translate(-50%, -50%) rotate(0deg); }
+  .ray-2 { transform: translate(-50%, -50%) rotate(60deg); animation-delay: -2s; }
+  .ray-3 { transform: translate(-50%, -50%) rotate(120deg); animation-delay: -4s; }
+  .sun-glow {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    background: radial-gradient(circle, #fff9c4, #ffe082);
+    top: 8%;
+    right: 15%;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #ffeb3b 0%, #ffc107 50%, transparent 70%);
     border-radius: 50%;
-    top: -4px;
-    left: -4px;
-    box-shadow: 0 0 8px rgba(255, 252, 224, 0.8);
+    box-shadow: 0 0 40px #ffc107, 0 0 80px rgba(255, 193, 7, 0.5);
+    animation: sunPulse 4s ease-in-out infinite;
   }
-  .satellite {
+  .clouds-3d {
     position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    inset: 0;
   }
-  .s1 {
-    background: radial-gradient(circle, #ef5350, #c62828);
-    box-shadow: 0 0 10px rgba(239, 83, 80, 0.8);
-    top: -3px;
-  }
-  .s2 {
-    background: radial-gradient(circle, #ab47bc, #7b1fa2);
-    box-shadow: 0 0 10px rgba(171, 71, 188, 0.8);
-    top: -3px;
-  }
-  .stars-field {
+  .cloud-3d {
     position: absolute;
-    inset: -100px;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.9;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  }
+  .cld-1 {
+    width: 70px;
+    height: 25px;
+    top: 15%;
+    left: 10%;
+    animation: cloudFloat 18s linear infinite;
+  }
+  .cld-2 {
+    width: 50px;
+    height: 20px;
+    top: 20%;
+    left: 45%;
+    animation: cloudFloat 22s linear infinite 3s;
+  }
+  .cld-3 {
+    width: 55px;
+    height: 22px;
+    top: 12%;
+    left: 70%;
+    animation: cloudFloat 20s linear infinite 6s;
+  }
+  .mountains-3d {
+    position: absolute;
+    bottom: 45%;
+    left: 0;
+    right: 0;
+    height: 80px;
+  }
+  .peak {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+  .peak-1 {
+    left: -5%;
+    border-width: 0 100px 90px 100px;
+    border-color: transparent transparent #5d7a48 transparent;
+  }
+  .peak-2 {
+    left: 15%;
+    border-width: 0 80px 70px 80px;
+    border-color: transparent transparent #6b8e5a transparent;
+  }
+  .peak-3 {
+    right: -5%;
+    border-width: 0 90px 80px 90px;
+    border-color: transparent transparent #5d7a48 transparent;
+  }
+  .forest {
+    position: absolute;
+    bottom: 25%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
     transform-style: preserve-3d;
   }
-  .star-particle {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: #fff;
-    border-radius: 50%;
-    left: var(--x);
-    top: var(--y);
-    transform: translateZ(var(--z));
-    box-shadow: 0 0 6px #fff;
-    animation: starTwinkle 2s ease-in-out infinite;
+  .tree-3d {
+    position: relative;
+    width: 20px;
+    transform-style: preserve-3d;
   }
-  @keyframes systemOrbit {
+  .tree-3d .trunk {
+    width: 6px;
+    height: 25px;
+    background: linear-gradient(180deg, #8d6e63, #5d4037);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+  .tree-3d .foliage {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 18px 30px 18px;
+    border-color: transparent transparent #2e7d32 transparent;
+  }
+  .t1 { transform: scale(1.2) translateZ(10px); }
+  .t2 { transform: scale(0.9) translateZ(-5px); }
+  .t3 { transform: scale(1.1) translateZ(8px); }
+  .t4 { transform: scale(0.85) translateZ(-8px); }
+  .t5 { transform: scale(1) translateZ(0px); }
+  .t6 { transform: scale(0.95) translateZ(5px); }
+  .ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 25%;
+    background: linear-gradient(180deg, #8bc34a 0%, #689f38 100%);
+  }
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: particleFloat 6s ease-in-out infinite;
+  }
+  .p1 { left: 10%; top: 30%; background: #fff; animation-delay: 0s; }
+  .p2 { left: 25%; top: 45%; background: #ffcc80; animation-delay: 1s; }
+  .p3 { left: 50%; top: 35%; background: #fff; animation-delay: 2s; }
+  .p4 { left: 70%; top: 50%; background: #ffcc80; animation-delay: 3s; }
+  .p5 { left: 85%; top: 40%; background: #fff; animation-delay: 4s; }
+  .birds {
+    position: absolute;
+    top: 25%;
+    width: 100%;
+  }
+  .bird {
+    position: absolute;
+    width: 12px;
+    height: 4px;
+    background: #333;
+    border-radius: 50%;
+    animation: birdFly 15s linear infinite;
+  }
+  .bird::before, .bird::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 6px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    top: -3px;
+  }
+  .bird::before { left: -6px; border-right: none; border-radius: 50% 0 0 50%; }
+  .bird::after { right: -6px; border-left: none; border-radius: 0 50% 50% 0; }
+  .b1 { left: 10%; animation-delay: 0s; }
+  .b2 { left: 40%; animation-delay: 5s; }
+  .b3 { left: 70%; animation-delay: 10s; }
+  .fireflies-3d {
+    position: absolute;
+    inset: 0;
+  }
+  .fly {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffc107;
+    animation: fireflyMove 5s ease-in-out infinite;
+  }
+  .f1 { left: 15%; bottom: 35%; animation-delay: 0s; }
+  .f2 { left: 40%; bottom: 45%; animation-delay: 1.5s; }
+  .f3 { left: 60%; bottom: 30%; animation-delay: 2.5s; }
+  .f4 { left: 80%; bottom: 40%; animation-delay: 3.5s; }
+  @keyframes rayRotate {
     0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
   }
   @keyframes sunPulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.08); }
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
   }
-  @keyframes earthSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  @keyframes cloudFloat {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(200px); }
   }
-  @keyframes atmosphereGlow {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.8; }
+  @keyframes particleFloat {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+    100% { transform: translateY(0) rotate(360deg); opacity: 0.6; }
   }
-  @keyframes orbitSpin {
-    0% { transform: translate(-50%, -50%) rotateX(75deg) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotateX(75deg) rotate(360deg); }
+  @keyframes birdFly {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(300px); }
   }
-  @keyframes starTwinkle {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-  }
-  @keyframes cometTail {
-    0% { transform: translateX(-150px) scale(0.5); opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 0.8; }
-    100% { transform: translateX(200px) scale(0.2); opacity: 0; }
+  @keyframes fireflyMove {
+    0% { transform: translate(0, 0); opacity: 0.3; }
+    25% { opacity: 1; }
+    50% { transform: translate(20px, -20px); opacity: 0.8; }
+    75% { opacity: 1; }
+    100% { transform: translate(40px, 0); opacity: 0.3; }
   }
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.35); }
