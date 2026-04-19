@@ -58,20 +58,28 @@ const categories = [...new Set(posts.map((post) => post.data.category || '随笔
         </div>
         <aside class="page-side-column">
           <div class="side-card">
-            <h3>钢琴键</h3>
+            <h3>melody</h3>
             <div class="piano-keys">
-              <div class="piano-key white-key">C</div>
-              <div class="piano-key black-key">C#</div>
-              <div class="piano-key white-key">D</div>
-              <div class="piano-key black-key">D#</div>
-              <div class="piano-key white-key">E</div>
-              <div class="piano-key white-key">F</div>
-              <div class="piano-key black-key">F#</div>
-              <div class="piano-key white-key">G</div>
-              <div class="piano-key black-key">G#</div>
-              <div class="piano-key white-key">A</div>
-              <div class="piano-key black-key">A#</div>
-              <div class="piano-key white-key">B</div>
+              <div class="piano-key white-key" data-note="C4">C</div>
+              <div class="piano-key black-key" data-note="Cs4">C#</div>
+              <div class="piano-key white-key" data-note="D4">D</div>
+              <div class="piano-key black-key" data-note="Ds4">D#</div>
+              <div class="piano-key white-key" data-note="E4">E</div>
+              <div class="piano-key white-key" data-note="F4">F</div>
+              <div class="piano-key black-key" data-note="Fs4">F#</div>
+              <div class="piano-key white-key" data-note="G4">G</div>
+              <div class="piano-key black-key" data-note="Gs4">G#</div>
+              <div class="piano-key white-key" data-note="A4">A</div>
+              <div class="piano-key black-key" data-note="As4">A#</div>
+              <div class="piano-key white-key" data-note="B4">B</div>
+              <div class="piano-key white-key" data-note="C5">C</div>
+              <div class="piano-key black-key" data-note="Cs5">C#</div>
+              <div class="piano-key white-key" data-note="D5">D</div>
+              <div class="piano-key black-key" data-note="Ds5">D#</div>
+              <div class="piano-key white-key" data-note="E5">E</div>
+            </div>
+            <div class="audio-player">
+              <audio id="piano-audio"></audio>
             </div>
           </div>
           <div class="side-card">
@@ -93,58 +101,92 @@ const categories = [...new Set(posts.map((post) => post.data.category || '随笔
   .page-desc { color: var(--text-muted); margin: 0 0 1.25rem; }
   .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
   .piano-keys {
-    height: 120px;
+    height: 140px;
     background: 
-      linear-gradient(135deg, rgba(139, 69, 19, 0.15), rgba(101, 67, 33, 0.25)),
-      radial-gradient(ellipse at center, rgba(139, 69, 19, 0.2), transparent 60%);
-    border-radius: 20px;
-    padding: 1rem;
+      linear-gradient(180deg, #2F4F4F 0%, #1a1a1a 100%);
+    border-radius: 16px;
+    padding: 0.75rem;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: 2px;
+    gap: 1px;
     position: relative;
+    overflow-x: auto;
   }
   .piano-key {
-    width: 24px;
-    height: 80px;
-    border-radius: 4px 4px 8px 8px;
+    min-width: 22px;
+    height: 90px;
+    border-radius: 3px 3px 6px 6px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: bold;
-    color: #333;
     cursor: pointer;
     transition: all 0.1s ease;
-    position: relative;
+    user-select: none;
   }
   .white-key {
-    background: linear-gradient(to bottom, #fff, #f5f5f5);
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: linear-gradient(to bottom, #fafafa, #e0e0e0);
+    border: 1px solid #bbb;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     z-index: 1;
+    color: #222;
+  }
+  .white-key:active, .white-key.active {
+    background: linear-gradient(to bottom, #ffd700, #daa520);
+    transform: translateY(3px);
   }
   .black-key {
-    background: linear-gradient(to bottom, #333, #000);
-    color: #fff;
-    height: 50px;
-    width: 18px;
-    margin: 0 -9px;
-    border-radius: 0 0 6px 6px;
+    background: linear-gradient(to bottom, #1a1a1a, #000);
+    color: transparent;
+    height: 55px;
+    min-width: 16px;
+    margin: 0 -8px;
+    border-radius: 0 0 4px 4px;
     z-index: 2;
   }
-  .piano-key:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  .black-key:active, .black-key.active {
+    background: linear-gradient(to bottom, #ff4500, #8b0000);
   }
-  .piano-key.playing {
-    animation: keyPress 0.3s ease;
-  }
-  @keyframes keyPress {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); background: linear-gradient(to bottom, #ffeb3b, #ffc107); }
-    100% { transform: translateY(0); }
-  }
+  .audio-player { display: none; }
   @media (max-width: 768px) { .posts-grid { grid-template-columns: 1fr; } }
 </style>
+
+<script>
+  const noteFrequencies = {
+    'C4': 261.63, 'Cs4': 277.18, 'D4': 293.66, 'Ds4': 311.13, 'E4': 329.63,
+    'F4': 349.23, 'Fs4': 369.99, 'G4': 392.00, 'Gs4': 415.30, 'A4': 440.00, 'As4': 466.16, 'B4': 493.88,
+    'C5': 523.25, 'Cs5': 554.37, 'D5': 587.33, 'Ds5': 622.25, 'E5': 659.25
+  };
+  
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  function playNote(frequency) {
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    
+    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.8);
+  }
+  
+  document.querySelectorAll('.piano-key').forEach(key => {
+    key.addEventListener('click', () => {
+      const note = key.dataset.note;
+      if (note && noteFrequencies[note]) {
+        key.classList.add('active');
+        playNote(noteFrequencies[note]);
+        setTimeout(() => key.classList.remove('active'), 200);
+      }
+    });
+  });
+</script>
