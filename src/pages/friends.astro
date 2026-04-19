@@ -7,15 +7,21 @@ import friendLinks from '../data/friend-links.json';
 import { SITE_TITLE } from '../consts';
 import { withBase } from '../utils/paths';
 
+interface FriendLink {
+  name: string;
+  url: string;
+  description: string;
+  avatar: string;
+}
 const siteInfo = {
   name: 'YUNN-BLOG',
   author: 'Yunn',
-  url: 'https://jjyun-ustc.github.io/yunn-blog/',
-  description: '记录生活切面与片段灵光',
+  url: 'https://github.com/JJyun-ustc',
+  description: '请输入文本 ：（',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
 };
 
-const approvedLinks = friendLinks.approved ?? [];
+const approvedLinks = (friendLinks.approved ?? []) as FriendLink[];
 ---
 
 <!doctype html>
@@ -29,7 +35,7 @@ const approvedLinks = friendLinks.approved ?? [];
       <section class="page-hero">
         <span class="eyebrow">friend map</span>
         <h1>友情链接</h1>
-        <p class="page-desc">相关站点与来往痕迹</p>
+        <p class="page-desc">相关站点</p>
       </section>
 
       <section class="page-grid">
@@ -55,7 +61,6 @@ const approvedLinks = friendLinks.approved ?? [];
           <section class="friends-section card-surface">
             <div class="section-heading">
               <h2>友情链接展示</h2>
-              <a href={withBase('admin/')} target="_blank" rel="noreferrer">后台处理展示</a>
             </div>
 
             {approvedLinks.length > 0 ? (
