@@ -58,13 +58,20 @@ const categories = [...new Set(posts.map((post) => post.data.category || '随笔
         </div>
         <aside class="page-side-column">
           <div class="side-card">
-            <h3>脉动</h3>
-            <div class="pulse-wave">
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
+            <h3>钢琴键</h3>
+            <div class="piano-keys">
+              <div class="piano-key white-key">C</div>
+              <div class="piano-key black-key">C#</div>
+              <div class="piano-key white-key">D</div>
+              <div class="piano-key black-key">D#</div>
+              <div class="piano-key white-key">E</div>
+              <div class="piano-key white-key">F</div>
+              <div class="piano-key black-key">F#</div>
+              <div class="piano-key white-key">G</div>
+              <div class="piano-key black-key">G#</div>
+              <div class="piano-key white-key">A</div>
+              <div class="piano-key black-key">A#</div>
+              <div class="piano-key white-key">B</div>
             </div>
           </div>
           <div class="side-card">
@@ -85,23 +92,59 @@ const categories = [...new Set(posts.map((post) => post.data.category || '随笔
 <style>
   .page-desc { color: var(--text-muted); margin: 0 0 1.25rem; }
   .posts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem; }
-  .pulse-wave { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 100px; padding: 1rem 0; }
-  .pulse-wave .bar {
-    width: 14px;
-    border-radius: 7px;
-    animation: wavePulse 1.4s ease-in-out infinite;
-    transform-origin: bottom;
+  .piano-keys {
+    height: 120px;
+    background: 
+      linear-gradient(135deg, rgba(139, 69, 19, 0.15), rgba(101, 67, 33, 0.25)),
+      radial-gradient(ellipse at center, rgba(139, 69, 19, 0.2), transparent 60%);
+    border-radius: 20px;
+    padding: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
   }
-  .pulse-wave .bar:nth-child(1) { height: 35%; background: linear-gradient(to top, #f97316, #fbbf24); animation-delay: 0s; }
-  .pulse-wave .bar:nth-child(2) { height: 70%; background: linear-gradient(to top, #ec4899, #f472b6); animation-delay: 0.15s; }
-  .pulse-wave .bar:nth-child(3) { height: 50%; background: linear-gradient(to top, #8b5cf6, #a78bfa); animation-delay: 0.3s; }
-  .pulse-wave .bar:nth-child(4) { height: 85%; background: linear-gradient(to top, #06b6d4, #22d3ee); animation-delay: 0.45s; }
-  .pulse-wave .bar:nth-child(5) { height: 40%; background: linear-gradient(to top, #10b981, #34d399); animation-delay: 0.6s; }
-  @keyframes wavePulse {
-    0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
-    25% { transform: scaleY(1); opacity: 1; }
-    50% { transform: scaleY(0.6); opacity: 0.7; }
-    75% { transform: scaleY(1); opacity: 1; }
+  .piano-key {
+    width: 24px;
+    height: 80px;
+    border-radius: 4px 4px 8px 8px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    position: relative;
+  }
+  .white-key {
+    background: linear-gradient(to bottom, #fff, #f5f5f5);
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1;
+  }
+  .black-key {
+    background: linear-gradient(to bottom, #333, #000);
+    color: #fff;
+    height: 50px;
+    width: 18px;
+    margin: 0 -9px;
+    border-radius: 0 0 6px 6px;
+    z-index: 2;
+  }
+  .piano-key:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+  .piano-key.playing {
+    animation: keyPress 0.3s ease;
+  }
+  @keyframes keyPress {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); background: linear-gradient(to bottom, #ffeb3b, #ffc107); }
+    100% { transform: translateY(0); }
   }
   @media (max-width: 768px) { .posts-grid { grid-template-columns: 1fr; } }
 </style>

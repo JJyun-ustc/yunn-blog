@@ -18,7 +18,7 @@ const siteInfo = {
   author: 'Yunn',
   url: 'https://github.com/JJyun-ustc',
   description: '请输入文本 ：（',
-  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=wenyun',
+  avatar:"\public\images\homepage\61afbe58d109b3de216590408abf6c81810a4c25.jpg",
 };
 
 const approvedLinks = (friendLinks.approved ?? []) as FriendLink[];
@@ -102,13 +102,26 @@ const approvedLinks = (friendLinks.approved ?? []) as FriendLink[];
 
         <aside class="page-side-column">
           <div class="side-card">
-            <h3>脉动</h3>
-            <div class="pulse-wave">
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
+            <h3>音频频谱</h3>
+            <div class="spectrum-analyzer">
+              <div class="spectrum-bars">
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-bar"></div>
+              </div>
             </div>
           </div>
         </aside>
@@ -266,22 +279,49 @@ const approvedLinks = (friendLinks.approved ?? []) as FriendLink[];
     }
   }
 
-  .pulse-wave { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 100px; padding: 1rem 0; }
-  .pulse-wave .bar {
-    width: 14px;
-    border-radius: 7px;
-    animation: wavePulse 1.4s ease-in-out infinite;
+  .spectrum-analyzer {
+    height: 120px;
+    background: 
+      linear-gradient(135deg, rgba(34, 139, 34, 0.15), rgba(0, 100, 0, 0.25)),
+      radial-gradient(ellipse at center, rgba(34, 139, 34, 0.2), transparent 70%);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .spectrum-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 10px;
+    gap: 3px;
+  }
+  .spectrum-bar {
+    width: 6px;
+    background: linear-gradient(to top, #228B22, #90EE90);
+    border-radius: 3px 3px 0 0;
+    animation: spectrumPulse 1.5s ease-in-out infinite;
     transform-origin: bottom;
   }
-  .pulse-wave .bar:nth-child(1) { height: 35%; background: linear-gradient(to top, #f97316, #fbbf24); animation-delay: 0s; }
-  .pulse-wave .bar:nth-child(2) { height: 70%; background: linear-gradient(to top, #ec4899, #f472b6); animation-delay: 0.15s; }
-  .pulse-wave .bar:nth-child(3) { height: 50%; background: linear-gradient(to top, #8b5cf6, #a78bfa); animation-delay: 0.3s; }
-  .pulse-wave .bar:nth-child(4) { height: 85%; background: linear-gradient(to top, #06b6d4, #22d3ee); animation-delay: 0.45s; }
-  .pulse-wave .bar:nth-child(5) { height: 40%; background: linear-gradient(to top, #10b981, #34d399); animation-delay: 0.6s; }
-  @keyframes wavePulse {
-    0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+  .spectrum-bar:nth-child(1) { height: 30%; animation-delay: 0s; }
+  .spectrum-bar:nth-child(2) { height: 45%; animation-delay: 0.1s; }
+  .spectrum-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+  .spectrum-bar:nth-child(4) { height: 35%; animation-delay: 0.3s; }
+  .spectrum-bar:nth-child(5) { height: 70%; animation-delay: 0.4s; }
+  .spectrum-bar:nth-child(6) { height: 50%; animation-delay: 0.5s; }
+  .spectrum-bar:nth-child(7) { height: 80%; animation-delay: 0.6s; }
+  .spectrum-bar:nth-child(8) { height: 40%; animation-delay: 0.7s; }
+  .spectrum-bar:nth-child(9) { height: 65%; animation-delay: 0.8s; }
+  .spectrum-bar:nth-child(10) { height: 55%; animation-delay: 0.9s; }
+  .spectrum-bar:nth-child(11) { height: 75%; animation-delay: 1.0s; }
+  .spectrum-bar:nth-child(12) { height: 42%; animation-delay: 1.1s; }
+  .spectrum-bar:nth-child(13) { height: 68%; animation-delay: 1.2s; }
+  .spectrum-bar:nth-child(14) { height: 58%; animation-delay: 1.3s; }
+  .spectrum-bar:nth-child(15) { height: 72%; animation-delay: 1.4s; }
+  @keyframes spectrumPulse {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.4; }
     25% { transform: scaleY(1); opacity: 1; }
-    50% { transform: scaleY(0.6); opacity: 0.7; }
-    75% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.5); opacity: 0.7; }
+    75% { transform: scaleY(0.8); opacity: 0.9; }
   }
 </style>
