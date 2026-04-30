@@ -1,12 +1,12 @@
 ---
-const appId = import.meta.env.PUBLIC_VALINE_APP_ID;
-const appKey = import.meta.env.PUBLIC_VALINE_APP_KEY;
-const serverURLs = import.meta.env.PUBLIC_VALINE_SERVER_URL || '';
-const placeholder = import.meta.env.PUBLIC_VALINE_PLACEHOLDER || '写下你路过这里时的心情吧...';
-const avatar = import.meta.env.PUBLIC_VALINE_AVATAR || 'robohash';
-const requiredFields = import.meta.env.PUBLIC_VALINE_REQUIRED_FIELDS || 'nick';
-const pageSize = Number(import.meta.env.PUBLIC_VALINE_PAGE_SIZE || '8');
-const isConfigured = Boolean(appId && appKey);
+const serverURL = import.meta.env.PUBLIC_WALINE_SERVER_URL || '';
+const placeholder = import.meta.env.PUBLIC_WALINE_PLACEHOLDER || '写下你路过这里时的心情吧...';
+const avatar = import.meta.env.PUBLIC_WALINE_AVATAR || 'mp';
+const requiredMeta = import.meta.env.PUBLIC_WALINE_REQUIRED_META || 'nick';
+const pageSize = Number(import.meta.env.PUBLIC_WALINE_PAGE_SIZE || '8');
+const lang = import.meta.env.PUBLIC_WALINE_LANG || 'zh-CN';
+const login = import.meta.env.PUBLIC_WALINE_LOGIN || 'disable';
+const isConfigured = Boolean(serverURL);
 ---
 
 <section class="side-card guestbook-card">
@@ -25,15 +25,15 @@ const isConfigured = Boolean(appId && appKey);
   {isConfigured ? (
     <div class="guestbook-shell">
       <div class="guestbook-note">
-        支持匿名留言。昵称建议保留，邮箱可按你的配置选填。
+        现在已切换到 Waline，支持匿名留言。建议保留昵称，邮箱可按你的配置选填。
       </div>
       <div id="guestbook-thread" class="guestbook-thread"></div>
     </div>
   ) : (
     <div class="guestbook-empty">
       <strong>留言板界面已经接好</strong>
-      <p>还差 Valine 的 LeanCloud 配置，所以当前环境暂时不能真正提交和读取留言。</p>
-      <p>补充 `PUBLIC_VALINE_APP_ID` 和 `PUBLIC_VALINE_APP_KEY` 后，访客就可以直接免登录留言。</p>
+      <p>当前还没填 Waline 服务地址，所以这里暂时不能真正提交和读取留言。</p>
+      <p>补充 `PUBLIC_WALINE_SERVER_URL` 后，访客就可以直接免登录留言。</p>
     </div>
   )}
 
@@ -42,58 +42,49 @@ const isConfigured = Boolean(appId && appKey);
   </noscript>
 </section>
 
-<script define:vars={{ appId, appKey, serverURLs, placeholder, avatar, requiredFields, pageSize, isConfigured }}>
+<script
+  define:vars={{ serverURL, placeholder, avatar, requiredMeta, pageSize, lang, login, isConfigured }}
+>
   const mount = document.getElementById('guestbook-thread');
 
-  function loadValineScript() {
-    return new Promise((resolve, reject) => {
-      if (window.Valine) {
-        resolve(window.Valine);
-        return;
-      }
+  function ensureWalineStyles() {
+    if (document.querySelector('link[data-guestbook-waline-style]')) return;
 
-      const existing = document.querySelector('script[data-guestbook-valine]');
-      if (existing) {
-        existing.addEventListener('load', () => resolve(window.Valine), { once: true });
-        existing.addEventListener('error', reject, { once: true });
-        return;
-      }
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/@waline/client@v3/dist/waline.css';
+    link.dataset.guestbookWalineStyle = 'true';
+    document.head.appendChild(link);
+  }
 
-      const script = document.createElement('script');
-      script.src = 'https://unpkg.com/valine/dist/Valine.min.js';
-      script.async = true;
-      script.dataset.guestbookValine = 'true';
-      script.onload = () => resolve(window.Valine);
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
+  async function loadWaline() {
+    if (window.__guestbookWalineInit) return window.__guestbookWalineInit;
+
+    window.__guestbookWalineInit = import('https://unpkg.com/@waline/client@v3/dist/waline.js');
+    return window.__guestbookWalineInit;
   }
 
   async function initGuestbook() {
     if (!mount || !isConfigured) return;
 
     try {
-      const Valine = await loadValineScript();
-      if (!Valine) return;
+      ensureWalineStyles();
+      const { init } = await loadWaline();
 
-      new Valine({
+      init({
         el: '#guestbook-thread',
-        appId,
-        appKey,
-        serverURLs: serverURLs || undefined,
+        serverURL,
+        path: '/guestbook/home',
+        lang,
         placeholder,
         avatar,
-        requiredFields: requiredFields
+        requiredMeta: requiredMeta
           .split(',')
           .map((field) => field.trim())
           .filter(Boolean),
-        meta: ['nick', 'mail'],
         pageSize,
-        path: '/guestbook/home',
-        lang: 'zh-CN',
-        recordIP: false,
-        visitor: false,
-        highlight: false,
+        meta: ['nick', 'mail'],
+        login,
       });
     } catch (error) {
       mount.innerHTML = '<div class="guestbook-runtime-error">留言板加载失败，请稍后再试。</div>';
@@ -193,51 +184,51 @@ const isConfigured = Boolean(appId && appKey);
     padding: 0.2rem;
   }
 
-  :global(.guestbook-card .vwrap) {
+  :global(.guestbook-card .wl-editor),
+  :global(.guestbook-card .wl-panel),
+  :global(.guestbook-card .wl-card),
+  :global(.guestbook-card .wl-sort),
+  :global(.guestbook-card .wl-empty),
+  :global(.guestbook-card .wl-login-info) {
     border-radius: 20px;
-    border: 1px solid rgba(91, 140, 255, 0.16);
+    border-color: rgba(91, 140, 255, 0.16);
     background: rgba(255, 255, 255, 0.78);
     box-shadow: none;
   }
 
-  :global(.guestbook-card .vheader),
-  :global(.guestbook-card .vedit),
-  :global(.guestbook-card .vcontrol) {
-    background: transparent;
+  :global(.guestbook-card .wl-editor) {
+    padding: 0.4rem;
   }
 
-  :global(.guestbook-card .vinput) {
-    font-size: 0.95rem;
+  :global(.guestbook-card .wl-input),
+  :global(.guestbook-card .wl-editor textarea),
+  :global(.guestbook-card .wl-card .wl-content) {
     color: var(--text);
   }
 
-  :global(.guestbook-card .vinput::placeholder),
-  :global(.guestbook-card .vempty),
-  :global(.guestbook-card .vinfo),
-  :global(.guestbook-card .vtime),
-  :global(.guestbook-card .vcount),
-  :global(.guestbook-card .vnick),
-  :global(.guestbook-card .vat) {
+  :global(.guestbook-card .wl-meta-input),
+  :global(.guestbook-card .wl-meta-input::placeholder),
+  :global(.guestbook-card .wl-input::placeholder),
+  :global(.guestbook-card .wl-time),
+  :global(.guestbook-card .wl-info),
+  :global(.guestbook-card .wl-empty),
+  :global(.guestbook-card .wl-count),
+  :global(.guestbook-card .wl-sort li) {
     color: var(--text-muted);
   }
 
-  :global(.guestbook-card .vbtn) {
+  :global(.guestbook-card .wl-btn.primary) {
     border-radius: 999px;
     border: 1px solid transparent;
     background: linear-gradient(135deg, #4f46e5, #f59e0b);
     color: #fff;
   }
 
-  :global(.guestbook-card .vbtn:hover) {
+  :global(.guestbook-card .wl-btn.primary:hover) {
     opacity: 0.92;
   }
 
-  :global(.guestbook-card .vcards .vcard) {
-    padding: 1rem 0;
-    border-top-color: rgba(91, 140, 255, 0.12);
-  }
-
-  :global(.guestbook-card .vcontent p) {
+  :global(.guestbook-card .wl-content p) {
     color: var(--text);
     line-height: 1.8;
   }
