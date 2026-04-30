@@ -1,0 +1,259 @@
+---
+const appId = import.meta.env.PUBLIC_VALINE_APP_ID;
+const appKey = import.meta.env.PUBLIC_VALINE_APP_KEY;
+const serverURLs = import.meta.env.PUBLIC_VALINE_SERVER_URL || '';
+const placeholder = import.meta.env.PUBLIC_VALINE_PLACEHOLDER || '写下你路过这里时的心情吧...';
+const avatar = import.meta.env.PUBLIC_VALINE_AVATAR || 'robohash';
+const requiredFields = import.meta.env.PUBLIC_VALINE_REQUIRED_FIELDS || 'nick';
+const pageSize = Number(import.meta.env.PUBLIC_VALINE_PAGE_SIZE || '8');
+const isConfigured = Boolean(appId && appKey);
+---
+
+<section class="side-card guestbook-card">
+  <div class="guestbook-header">
+    <div>
+      <p class="guestbook-tag">guestbook</p>
+      <h3>留言板</h3>
+    </div>
+    <span class="guestbook-chip">免登录</span>
+  </div>
+
+  <p class="guestbook-intro">
+    路过这里的朋友可以直接留言，不用注册账号。欢迎留下你的名字、近况，或者一句今天想说的话。
+  </p>
+
+  {isConfigured ? (
+    <div class="guestbook-shell">
+      <div class="guestbook-note">
+        支持匿名留言。昵称建议保留，邮箱可按你的配置选填。
+      </div>
+      <div id="guestbook-thread" class="guestbook-thread"></div>
+    </div>
+  ) : (
+    <div class="guestbook-empty">
+      <strong>留言板界面已经接好</strong>
+      <p>还差 Valine 的 LeanCloud 配置，所以当前环境暂时不能真正提交和读取留言。</p>
+      <p>补充 `PUBLIC_VALINE_APP_ID` 和 `PUBLIC_VALINE_APP_KEY` 后，访客就可以直接免登录留言。</p>
+    </div>
+  )}
+
+  <noscript>
+    <p class="guestbook-noscript">留言板需要 JavaScript 才能加载。</p>
+  </noscript>
+</section>
+
+<script define:vars={{ appId, appKey, serverURLs, placeholder, avatar, requiredFields, pageSize, isConfigured }}>
+  const mount = document.getElementById('guestbook-thread');
+
+  function loadValineScript() {
+    return new Promise((resolve, reject) => {
+      if (window.Valine) {
+        resolve(window.Valine);
+        return;
+      }
+
+      const existing = document.querySelector('script[data-guestbook-valine]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(window.Valine), { once: true });
+        existing.addEventListener('error', reject, { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/valine/dist/Valine.min.js';
+      script.async = true;
+      script.dataset.guestbookValine = 'true';
+      script.onload = () => resolve(window.Valine);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  async function initGuestbook() {
+    if (!mount || !isConfigured) return;
+
+    try {
+      const Valine = await loadValineScript();
+      if (!Valine) return;
+
+      new Valine({
+        el: '#guestbook-thread',
+        appId,
+        appKey,
+        serverURLs: serverURLs || undefined,
+        placeholder,
+        avatar,
+        requiredFields: requiredFields
+          .split(',')
+          .map((field) => field.trim())
+          .filter(Boolean),
+        meta: ['nick', 'mail'],
+        pageSize,
+        path: '/guestbook/home',
+        lang: 'zh-CN',
+        recordIP: false,
+        visitor: false,
+        highlight: false,
+      });
+    } catch (error) {
+      mount.innerHTML = '<div class="guestbook-runtime-error">留言板加载失败，请稍后再试。</div>';
+      console.error('Guestbook failed to load', error);
+    }
+  }
+
+  initGuestbook();
+</script>
+
+<style>
+  .guestbook-card {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background:
+      radial-gradient(circle at top right, rgba(255, 196, 126, 0.3), transparent 34%),
+      radial-gradient(circle at left bottom, rgba(91, 140, 255, 0.18), transparent 38%),
+      linear-gradient(160deg, rgba(255, 252, 246, 0.95), rgba(245, 248, 255, 0.92));
+    overflow: hidden;
+  }
+
+  .guestbook-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .guestbook-tag {
+    margin: 0 0 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .guestbook-header h3 {
+    margin: 0;
+    font-size: 1.45rem;
+  }
+
+  .guestbook-chip {
+    flex-shrink: 0;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(91, 140, 255, 0.18);
+    color: #3056d3;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .guestbook-intro {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .guestbook-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .guestbook-note,
+  .guestbook-empty,
+  .guestbook-noscript,
+  .guestbook-runtime-error {
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+    border: 1px solid rgba(91, 140, 255, 0.16);
+    background: rgba(255, 255, 255, 0.68);
+    color: var(--text-secondary);
+  }
+
+  .guestbook-empty strong {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--text);
+  }
+
+  .guestbook-empty p,
+  .guestbook-noscript,
+  .guestbook-runtime-error {
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  .guestbook-empty p + p {
+    margin-top: 0.4rem;
+  }
+
+  .guestbook-thread {
+    min-height: 220px;
+    padding: 0.2rem;
+  }
+
+  :global(.guestbook-card .vwrap) {
+    border-radius: 20px;
+    border: 1px solid rgba(91, 140, 255, 0.16);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: none;
+  }
+
+  :global(.guestbook-card .vheader),
+  :global(.guestbook-card .vedit),
+  :global(.guestbook-card .vcontrol) {
+    background: transparent;
+  }
+
+  :global(.guestbook-card .vinput) {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  :global(.guestbook-card .vinput::placeholder),
+  :global(.guestbook-card .vempty),
+  :global(.guestbook-card .vinfo),
+  :global(.guestbook-card .vtime),
+  :global(.guestbook-card .vcount),
+  :global(.guestbook-card .vnick),
+  :global(.guestbook-card .vat) {
+    color: var(--text-muted);
+  }
+
+  :global(.guestbook-card .vbtn) {
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, #4f46e5, #f59e0b);
+    color: #fff;
+  }
+
+  :global(.guestbook-card .vbtn:hover) {
+    opacity: 0.92;
+  }
+
+  :global(.guestbook-card .vcards .vcard) {
+    padding: 1rem 0;
+    border-top-color: rgba(91, 140, 255, 0.12);
+  }
+
+  :global(.guestbook-card .vcontent p) {
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .guestbook-card {
+      padding: 1rem;
+    }
+
+    .guestbook-header {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .guestbook-chip {
+      align-self: flex-start;
+    }
+  }
+</style>
