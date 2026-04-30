@@ -5,49 +5,184 @@ const category = import.meta.env.PUBLIC_GISCUS_CATEGORY || 'Announcements';
 const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID;
 const mapping = import.meta.env.PUBLIC_GISCUS_MAPPING || 'pathname';
 const theme = import.meta.env.PUBLIC_GISCUS_THEME || 'preferred_color_scheme';
-const lang = import.meta.env.PUBLIC_GISCUS_LANG || 'zh-CN';
-const isConfigured = Boolean(repo && repoId && categoryId);
+const giscusLang = import.meta.env.PUBLIC_GISCUS_LANG || 'zh-CN';
+const isGiscusConfigured = Boolean(repo && repoId && categoryId);
+
+const walineServerURL = import.meta.env.PUBLIC_WALINE_SERVER_URL || '';
+const walinePlaceholder = import.meta.env.PUBLIC_WALINE_PLACEHOLDER || '写下你路过这里时的心情吧...';
+const walineAvatar = import.meta.env.PUBLIC_WALINE_AVATAR || 'mp';
+const walineRequiredMeta = import.meta.env.PUBLIC_WALINE_REQUIRED_META || 'nick';
+const walinePageSize = Number(import.meta.env.PUBLIC_WALINE_PAGE_SIZE || '8');
+const walineLang = import.meta.env.PUBLIC_WALINE_LANG || 'zh-CN';
+const walineLogin = import.meta.env.PUBLIC_WALINE_LOGIN || 'disable';
+const isWalineConfigured = Boolean(walineServerURL);
+
+const hasAnyProvider = isGiscusConfigured || isWalineConfigured;
+const showTabs = isGiscusConfigured && isWalineConfigured;
+const defaultTab = isWalineConfigured ? 'waline' : 'giscus';
+const commentPath = Astro.url.pathname;
 ---
 
-<div class="comments-section">
+<div
+  class="comments-section"
+  data-default-tab={defaultTab}
+  data-show-tabs={showTabs ? 'true' : 'false'}
+>
   <div class="comments-header">
     <h3>评论区</h3>
-    <p class="comments-hint">使用 GitHub 账号参与讨论</p>
+    {showTabs && (
+      <div class="comment-tabs" role="tablist" aria-label="评论方式">
+        <button type="button" class="comment-tab" data-tab-trigger="waline">匿名评论</button>
+        <button type="button" class="comment-tab" data-tab-trigger="giscus">GitHub 评论</button>
+      </div>
+    )}
   </div>
 
-  {isConfigured ? (
-    <div class="giscus-container">
-      <script
-        src="https://giscus.app/client.js"
-        data-repo={repo}
-        data-repo-id={repoId}
-        data-category={category}
-        data-category-id={categoryId}
-        data-mapping={mapping}
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme={theme}
-        data-lang={lang}
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async
-      ></script>
+  {hasAnyProvider ? (
+    <div class="comments-panels">
+      {isWalineConfigured && (
+        <section class="comment-panel" data-panel="waline">
+          <div id="waline-thread" class="waline-thread"></div>
+        </section>
+      )}
+
+      {isGiscusConfigured && (
+        <section class="comment-panel" data-panel="giscus">
+          <div class="giscus-container">
+            <script
+              src="https://giscus.app/client.js"
+              data-repo={repo}
+              data-repo-id={repoId}
+              data-category={category}
+              data-category-id={categoryId}
+              data-mapping={mapping}
+              data-strict="0"
+              data-reactions-enabled="1"
+              data-emit-metadata="0"
+              data-input-position="top"
+              data-theme={theme}
+              data-lang={giscusLang}
+              data-loading="lazy"
+              crossorigin="anonymous"
+              async
+            ></script>
+          </div>
+        </section>
+      )}
     </div>
   ) : (
     <div class="comments-disabled">
-      <p>评论系统尚未完成配置。</p>
-      <p>需要先启用 GitHub Discussions，并填写 Giscus 的仓库与分类参数。</p>
+      <p>当前还没有配置评论服务。</p>
     </div>
   )}
 
   <noscript>
-    <p class="noscript-hint">
-      评论功能需要 JavaScript 支持。请启用 JavaScript 以参与讨论。
-    </p>
+    <p class="noscript-hint">评论功能需要 JavaScript 支持。</p>
   </noscript>
 </div>
+
+<script
+  define:vars={{
+    defaultTab,
+    showTabs,
+    isWalineConfigured,
+    walineServerURL,
+    walinePlaceholder,
+    walineAvatar,
+    walineRequiredMeta,
+    walinePageSize,
+    walineLang,
+    walineLogin,
+    commentPath,
+  }}
+>
+  const section = document.currentScript?.parentElement;
+
+  function setActiveTab(tab) {
+    if (!section) return;
+
+    section.querySelectorAll('[data-tab-trigger]').forEach((button) => {
+      const isActive = button.dataset.tabTrigger === tab;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    section.querySelectorAll('[data-panel]').forEach((panel) => {
+      panel.toggleAttribute('hidden', panel.dataset.panel !== tab);
+    });
+  }
+
+  function ensureWalineStyles() {
+    if (document.querySelector('link[data-comments-waline-style]')) return;
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/@waline/client@v3/dist/waline.css';
+    link.dataset.commentsWalineStyle = 'true';
+    document.head.appendChild(link);
+  }
+
+  async function loadWaline() {
+    if (window.__commentsWalineInit) return window.__commentsWalineInit;
+
+    window.__commentsWalineInit = import('https://unpkg.com/@waline/client@v3/dist/waline.js');
+    return window.__commentsWalineInit;
+  }
+
+  async function initWalineComments() {
+    if (!isWalineConfigured) return;
+
+    const mount = document.getElementById('waline-thread');
+    if (!mount || mount.dataset.initialized === 'true') return;
+
+    try {
+      ensureWalineStyles();
+      const { init } = await loadWaline();
+
+      init({
+        el: '#waline-thread',
+        serverURL: walineServerURL,
+        path: commentPath,
+        lang: walineLang,
+        placeholder: walinePlaceholder,
+        avatar: walineAvatar,
+        requiredMeta: walineRequiredMeta
+          .split(',')
+          .map((field) => field.trim())
+          .filter(Boolean),
+        pageSize: walinePageSize,
+        meta: ['nick', 'mail'],
+        login: walineLogin,
+      });
+
+      mount.dataset.initialized = 'true';
+    } catch (error) {
+      mount.innerHTML = '<div class="comments-runtime-error">匿名评论加载失败，请稍后再试。</div>';
+      console.error('Waline comments failed to load', error);
+    }
+  }
+
+  if (section) {
+    if (showTabs) {
+      section.querySelectorAll('[data-tab-trigger]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const tab = button.dataset.tabTrigger;
+          setActiveTab(tab);
+
+          if (tab === 'waline') {
+            initWalineComments();
+          }
+        });
+      });
+    }
+
+    setActiveTab(defaultTab);
+
+    if (defaultTab === 'waline') {
+      initWalineComments();
+    }
+  }
+</script>
 
 <style>
   .comments-section {
@@ -57,49 +192,144 @@ const isConfigured = Boolean(repo && repoId && categoryId);
   }
 
   .comments-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .comments-header h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .comments-hint {
     margin: 0;
-    color: var(--text-muted);
-    font-size: 0.875rem;
+    font-size: 1.25rem;
   }
 
-  .giscus-container {
+  .comment-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--border);
+  }
+
+  .comment-tab {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.48rem 0.9rem;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+  }
+
+  .comment-tab.is-active {
+    background: linear-gradient(135deg, #4f46e5, #f59e0b);
+    color: #fff;
+  }
+
+  .comment-tab:hover {
+    transform: translateY(-1px);
+  }
+
+  .comments-panels {
     min-height: 200px;
   }
 
-  .comments-disabled {
+  .comment-panel[hidden] {
+    display: none;
+  }
+
+  .giscus-container,
+  .waline-thread {
+    min-height: 200px;
+  }
+
+  .comments-disabled,
+  .noscript-hint,
+  .comments-runtime-error {
     padding: 1.25rem;
     border: 1px dashed var(--border);
     border-radius: 12px;
     background: var(--card-bg);
-  }
-
-  .comments-disabled p {
-    margin: 0.25rem 0;
     color: var(--text-muted);
   }
 
-  .noscript-hint {
-    text-align: center;
-    padding: 2rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-muted);
+  .comments-disabled p,
+  .noscript-hint,
+  .comments-runtime-error {
+    margin: 0;
   }
 
   :global(.giscus) {
     max-width: 100%;
+  }
+
+  :global(.comments-section .wl-editor),
+  :global(.comments-section .wl-panel),
+  :global(.comments-section .wl-card),
+  :global(.comments-section .wl-sort),
+  :global(.comments-section .wl-empty),
+  :global(.comments-section .wl-login-info) {
+    border-radius: 20px;
+    border-color: rgba(91, 140, 255, 0.16);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: none;
+  }
+
+  :global(.comments-section .wl-editor) {
+    padding: 0.4rem;
+  }
+
+  :global(.comments-section .wl-input),
+  :global(.comments-section .wl-editor textarea),
+  :global(.comments-section .wl-card .wl-content) {
+    color: var(--text);
+  }
+
+  :global(.comments-section .wl-meta-input),
+  :global(.comments-section .wl-meta-input::placeholder),
+  :global(.comments-section .wl-input::placeholder),
+  :global(.comments-section .wl-time),
+  :global(.comments-section .wl-info),
+  :global(.comments-section .wl-empty),
+  :global(.comments-section .wl-count),
+  :global(.comments-section .wl-sort li) {
+    color: var(--text-muted);
+  }
+
+  :global(.comments-section .wl-btn.primary) {
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, #4f46e5, #f59e0b);
+    color: #fff;
+  }
+
+  :global(.comments-section .wl-btn.primary:hover) {
+    opacity: 0.92;
+  }
+
+  :global(.comments-section .wl-content p) {
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 640px) {
+    .comments-header {
+      align-items: stretch;
+    }
+
+    .comment-tabs {
+      width: 100%;
+      justify-content: stretch;
+    }
+
+    .comment-tab {
+      flex: 1;
+      text-align: center;
+    }
   }
 </style>

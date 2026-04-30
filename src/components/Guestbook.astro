@@ -15,31 +15,13 @@ const isConfigured = Boolean(serverURL);
       <p class="guestbook-tag">guestbook</p>
       <h3>留言板</h3>
     </div>
-    <span class="guestbook-chip">免登录</span>
   </div>
 
-  <p class="guestbook-intro">
-    路过这里的朋友可以直接留言，不用注册账号。欢迎留下你的名字、近况，或者一句今天想说的话。
-  </p>
-
   {isConfigured ? (
-    <div class="guestbook-shell">
-      <div class="guestbook-note">
-        现在已切换到 Waline，支持匿名留言。建议保留昵称，邮箱可按你的配置选填。
-      </div>
-      <div id="guestbook-thread" class="guestbook-thread"></div>
-    </div>
+    <div id="guestbook-thread" class="guestbook-thread"></div>
   ) : (
-    <div class="guestbook-empty">
-      <strong>留言板界面已经接好</strong>
-      <p>当前还没填 Waline 服务地址，所以这里暂时不能真正提交和读取留言。</p>
-      <p>补充 `PUBLIC_WALINE_SERVER_URL` 后，访客就可以直接免登录留言。</p>
-    </div>
+    <div class="guestbook-thread"></div>
   )}
-
-  <noscript>
-    <p class="guestbook-noscript">留言板需要 JavaScript 才能加载。</p>
-  </noscript>
 </section>
 
 <script
@@ -128,32 +110,6 @@ const isConfigured = Boolean(serverURL);
     font-size: 1.45rem;
   }
 
-  .guestbook-chip {
-    flex-shrink: 0;
-    padding: 0.35rem 0.75rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(91, 140, 255, 0.18);
-    color: #3056d3;
-    font-size: 0.82rem;
-    font-weight: 700;
-  }
-
-  .guestbook-intro {
-    margin: 0;
-    color: var(--text-secondary);
-    line-height: 1.75;
-  }
-
-  .guestbook-shell {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
-
-  .guestbook-note,
-  .guestbook-empty,
-  .guestbook-noscript,
   .guestbook-runtime-error {
     padding: 0.95rem 1rem;
     border-radius: 18px;
@@ -162,21 +118,9 @@ const isConfigured = Boolean(serverURL);
     color: var(--text-secondary);
   }
 
-  .guestbook-empty strong {
-    display: block;
-    margin-bottom: 0.45rem;
-    color: var(--text);
-  }
-
-  .guestbook-empty p,
-  .guestbook-noscript,
   .guestbook-runtime-error {
     margin: 0;
     line-height: 1.7;
-  }
-
-  .guestbook-empty p + p {
-    margin-top: 0.4rem;
   }
 
   .guestbook-thread {
@@ -243,8 +187,5 @@ const isConfigured = Boolean(serverURL);
       flex-direction: column;
     }
 
-    .guestbook-chip {
-      align-self: flex-start;
-    }
   }
 </style>
